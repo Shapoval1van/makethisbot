@@ -1,41 +1,57 @@
 package com.makethisbot.bot;
 
+import com.makethisbot.bot.conversation.ConversationCycleManager;
+import com.makethisbot.bot.entity.User;
+import com.makethisbot.bot.repository.UserRepository;
+import com.makethisbot.bot.step.Step;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+@Component
 public class UpdateHandler {
 
+    @Autowired
+    protected UserRepository userRepository;
+
+    @Autowired
+    private ConversationCycleManager conversationCycleManager;
+
     public SendMessage processUpdate(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
+        Message message = update.getMessage();
+//        List<org.telegram.telegrambots.api.objects.User> newMembers = new ArrayList<>(Arrays.asList(new org.telegram.telegrambots.api.objects.User()));
+        List<org.telegram.telegrambots.api.objects.User> newMembers = message.getNewChatMembers();
 
-//
-//            // Creating a Mongo client
-//            MongoClient mongo = new MongoClient( "localhost" , 27017 );
-//
-//            // Creating Credentials
-//            MongoCredential credential;
-//            credential = MongoCredential.createCredential("sampleUser", "myDb",
-//                    "password".toCharArray());
-//            System.out.println("Connected to the database successfully");
-//
-//            // Accessing the database
-//            MongoDatabase database = mongo.getDatabase("myDb");
-//            MongoCollection mongoCollection = database.getCollection("test");
-//            BasicDBObject searchQuery = new BasicDBObject();
-//                    searchQuery.put("sdfsf", "sdfsdf");
-//            FindIterable<BasicDBObject> findIterable =  mongoCollection.find(searchQuery);
-//            MongoCursor<BasicDBObject> it = findIterable.iterator();
-//            while (it.hasNext()) {
-//                BasicDBObject dbObject = it.next();
-//                System.out.println(dbObject);
-//            }
-            long chat_id = update.getMessage().getChatId();
-
-            SendMessage message = new SendMessage() // Create a message object object
-                    .setChatId(chat_id)
-                    .setText("Шо хотіла залупа??");
-            return message; // Sending our message object to user
+        if (newMembers != null && !newMembers.isEmpty()) {
+            User user = getUserFromTelegramUpdate(update);
+            userRepository.save(user);
+            return new SendMessage(update.getMessage().getChatId(), "Hi new user maybe you want have the best bot in the world?????");//TODO move to property file
+        } else if (message != null && message.hasText()) {
+            Integer userId = getUserIdFromUpdate(update);
+            User user = userRepository.findOne(userId);
+            Step step = conversationCycleManager.determinateStepForUser(user);
+            return new SendMessage(update.getMessage().getChatId(), "ewr");
         }
-        return null;
+        return new SendMessage(update.getMessage().getChatId(), "ewr");
+    }
+
+    private User getUserFromTelegramUpdate(Update update) {
+        User user = new User();
+        user.set_id(update.getMessage().getFrom().getId());
+        user.setTelegramLastName(update.getMessage().getFrom().getLastName());
+        user.setTelegramFirsName(update.getMessage().getFrom().getFirstName());
+        user.setTelegramUsername(update.getMessage().getFrom().getUserName());
+        user.setLanguageCode(update.getMessage().getFrom().getLanguageCode());
+        return user;
+    }
+
+    private int getUserIdFromUpdate(Update update) {
+        return update.getMessage().getFrom().getId();
     }
 }

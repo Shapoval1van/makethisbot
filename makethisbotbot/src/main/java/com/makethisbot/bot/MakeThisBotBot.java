@@ -1,11 +1,13 @@
 package com.makethisbot.bot;
 
-import com.makethisbot.bot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +20,7 @@ public class MakeThisBotBot extends TelegramLongPollingBot {
     private int poolCount;
 
     @Autowired
-    private UserRepository userRepository;
+    private UpdateHandler updateHandler;
 
     private ExecutorService executorService;
 
@@ -29,15 +31,15 @@ public class MakeThisBotBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-      executorService.submit(() -> {
-          User user = new User();
-          User user1 = new User();
-          user.setLastName(update.getMessage().getText());
-          user1.setFirstName(update.getMessage().getText());
-          userRepository.save(user1);
-      });
-// some operations
-//        String result = future.get();
+        executorService.submit(() -> {
+            SendMessage sendMessage = updateHandler.processUpdate(update);
+            try {
+                Message message = execute(sendMessage);
+
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
