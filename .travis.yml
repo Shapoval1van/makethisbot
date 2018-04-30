@@ -1,2 +1,5 @@
-before_install: cd makethisbotbot
 language: java
+before_install: cd makethisbotbot
+script: 
+    - mvn clean install
+    - mvn checkstyle:check
