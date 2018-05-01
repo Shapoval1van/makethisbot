@@ -1,5 +1,8 @@
 language: java
 before_install: cd makethisbotbot
 script: 
-    - mvn clean install
+    - mvn pmd:check
     - mvn checkstyle:check
+    - mvn clean install
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

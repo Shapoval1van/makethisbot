@@ -16,7 +16,7 @@ public class MakeThisBotStarter {
         try {
             botsApi.registerBot(makeThisBotBot);
         } catch (TelegramApiException e) {
-            //TODO add exception handler
+            e.printStackTrace(); //TODO add exception handler
         }
     }
 }

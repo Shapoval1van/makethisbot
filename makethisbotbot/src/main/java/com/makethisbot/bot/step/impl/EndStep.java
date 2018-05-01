@@ -19,17 +19,22 @@ public class EndStep extends Step {
     }
 
     @Override
-    public void saveDataFromMessage(Message message) {
-
+    public boolean isDataValid(Message message) {
+        return false;
     }
 
     @Override
-    protected String getPromptMessage() {
+    public User updateUserData(User user, Message message) {
         return null;
     }
 
     @Override
-    protected String getUnSuccessMessage() {
+    public String getPromptMessage() {
+        return null;
+    }
+
+    @Override
+    public String getUnSuccessMessage() {
         return null;
     }
 

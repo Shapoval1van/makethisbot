@@ -23,17 +23,26 @@ public class EmailEnterStep extends Step {
     }
 
     @Override
-    public void saveDataFromMessage(Message message) {
-
+    public boolean isDataValid(Message message) {
+        String text = message.getText();
+        return !StringUtils.isEmpty(text); //TODO add more complicated validation
     }
 
     @Override
-    protected String getPromptMessage() {
+    public User updateUserData(User user, Message message) {
+        String name = message.getText();
+        user.setEmail(name);
+        return user;
+    }
+
+
+    @Override
+    public String getPromptMessage() {
         return "Enter email please";
     }
 
     @Override
-    protected String getUnSuccessMessage() {
+    public String getUnSuccessMessage() {
         return "Please try again";
     }
 }

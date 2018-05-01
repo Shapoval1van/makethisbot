@@ -24,7 +24,7 @@ public class Order {
         try {
             blobFileURL = new URL(url);
         } catch (MalformedURLException e) {
-            e.printStackTrace();//TODO add log
+            e.printStackTrace(); //TODO add log
         }
     }
 

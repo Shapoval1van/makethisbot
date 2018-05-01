@@ -4,17 +4,17 @@ import com.makethisbot.bot.config.ApplicationConfig;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.telegram.telegrambots.ApiContextInitializer;
 
-public class MakeThisBotBotApplication{
+public class MakeThisBotBotApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         registerTelegramApiContext();
-		final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+        final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ApplicationConfig.class);
 
-		MakeThisBotStarter makeThisBotStarter = applicationContext.getBean(MakeThisBotStarter.class);
-		makeThisBotStarter.start();
-	}
+        MakeThisBotStarter makeThisBotStarter = applicationContext.getBean(MakeThisBotStarter.class);
+        makeThisBotStarter.start();
+    }
 
-	private static void registerTelegramApiContext() {
+    private static void registerTelegramApiContext() {
         ApiContextInitializer.init();
     }
 }

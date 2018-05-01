@@ -12,6 +12,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = {"com.makethisbot.bot.*"})
 public class PersistenceConfig extends AbstractMongoConfiguration {
 
+    private final static int PORT = 27017; //TODO change it
+
     @Override
     protected String getDatabaseName() {
         return "test";
@@ -19,7 +21,7 @@ public class PersistenceConfig extends AbstractMongoConfiguration {
 
     @Override
     public Mongo mongo() throws Exception {
-        return new MongoClient("127.0.0.1", 27017);
+        return new MongoClient("127.0.0.1", PORT);
     }
 
 }

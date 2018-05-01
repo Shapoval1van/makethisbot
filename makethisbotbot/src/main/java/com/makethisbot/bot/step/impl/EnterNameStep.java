@@ -24,18 +24,26 @@ public class EnterNameStep extends Step {
     }
 
     @Override
-    public void saveDataFromMessage(Message message) {
-//        Use
-//        userRepository.
+    public boolean isDataValid(Message message) {
+        String text = message.getText();
+        return !StringUtils.isEmpty(text); //TODO add more complicated validation
     }
 
     @Override
-    protected String getPromptMessage() {
+    public User updateUserData(User user, Message message) {
+        String name = message.getText();
+        user.setName(name);
+        return user;
+    }
+
+    @Override
+    public String getPromptMessage() {
         return "Please enter your name";
     }
 
     @Override
-    protected String getUnSuccessMessage() {
+    public String getUnSuccessMessage() {
         return "It's look like a joke. Try again";
     }
+
 }
