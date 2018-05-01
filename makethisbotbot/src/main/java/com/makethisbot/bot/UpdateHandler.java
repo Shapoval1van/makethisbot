@@ -33,7 +33,7 @@ public class UpdateHandler {
         return new SendMessage(message.getChatId(), "");
     }
 
-    private User getUserFromTelegramUpdate(Update update) {
+    protected User getUserFromTelegramUpdate(Update update) {
         User user = new User();
         user.setId(update.getMessage().getFrom().getId());
         user.setTelegramLastName(update.getMessage().getFrom().getLastName());
