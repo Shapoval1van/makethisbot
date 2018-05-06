@@ -4,6 +4,8 @@ import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.repository.UserRepository;
 import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.step.impl.EndStep;
+import com.makethisbot.bot.util.MessagesUtil;
+import com.makethisbot.bot.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -19,28 +21,28 @@ public class ConversationCycleManager {
     @Qualifier("enterNameStep")
     private Step step;
 
+    @Autowired
+    private MessagesUtil messagesUtil;
+
+    @Autowired
+    private UserUtil userUtil;
+
     public String processMessage(Message message, User user) {
         Step notCompletedStep = step.getNotCompletedStep(user);
         if (notCompletedStep instanceof EndStep) {
             return "Пока все нужно будет выдть кастомную клаву";
         }
         if (!notCompletedStep.isDataValid(message)) {
-            return notCompletedStep.getUnSuccessMessage();
+            return notCompletedStep.getUnSuccessMessageKey();
         }
         notCompletedStep.updateUserData(user, message);
         saveDataFromMessage(user);
-        return notCompletedStep.getNextStep().getPromptMessage();
+        String key = notCompletedStep.getNextStep().getPromptMessageKey();
+        return messagesUtil.getMessageByKey(key, userUtil.getLocalFromUser(user));
     }
 
     private void saveDataFromMessage(User user) {
         userRepository.save(user);
     }
 
-//    private String getTextForPromptMessage(Step step) {
-////        Step nextStep = step.getNextStep();
-////        if(nextStep != null) {
-////
-////        }
-//        return "";
-//    }
 }

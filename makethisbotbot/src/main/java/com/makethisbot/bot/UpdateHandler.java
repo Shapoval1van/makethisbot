@@ -3,6 +3,8 @@ package com.makethisbot.bot;
 import com.makethisbot.bot.conversation.ConversationCycleManager;
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.repository.UserRepository;
+import com.makethisbot.bot.util.MessagesUtil;
+import com.makethisbot.bot.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -18,32 +20,27 @@ public class UpdateHandler {
     @Autowired
     private ConversationCycleManager conversationCycleManager;
 
+    @Autowired
+    private UserUtil userUtil;
+
+    @Autowired
+    private MessagesUtil messagesUtil;
+
     public SendMessage processUpdate(Update update) {
         Message message = update.getMessage();
-        Integer userId = getUserIdFromUpdate(update);
+        Integer userId = userUtil.getUserIdFromUpdate(update);
         User user = userRepository.findOne(userId);
         if (user == null) {
-            user = getUserFromTelegramUpdate(update);
+            user = userUtil.getUserFromTelegramUpdate(update);
             userRepository.save(user);
-            return new SendMessage(update.getMessage().getChatId(), "Hi new user, maybe you want have the best bot in the world?????"); //TODO move to property file
+            String welcomeMessageText = messagesUtil.getMessageByKey("welcome.message", userUtil.getLocalFromUser(user));
+            return new SendMessage(update.getMessage().getChatId(), welcomeMessageText);
         } else if (message != null && message.hasText()) {
             String responseText = conversationCycleManager.processMessage(message, user);
             return new SendMessage(message.getChatId(), responseText);
         }
-        return new SendMessage(message.getChatId(), "");
+        return new SendMessage(message.getChatId(), "Something went wrong");
     }
 
-    protected User getUserFromTelegramUpdate(Update update) {
-        User user = new User();
-        user.setId(update.getMessage().getFrom().getId());
-        user.setTelegramLastName(update.getMessage().getFrom().getLastName());
-        user.setTelegramFirsName(update.getMessage().getFrom().getFirstName());
-        user.setTelegramUsername(update.getMessage().getFrom().getUserName());
-        user.setLanguageCode(update.getMessage().getFrom().getLanguageCode());
-        return user;
-    }
 
-    private int getUserIdFromUpdate(Update update) {
-        return update.getMessage().getFrom().getId();
-    }
 }

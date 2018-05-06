@@ -31,7 +31,7 @@ public abstract class Step {
 
     public abstract User updateUserData(User user, Message message);
 
-    public abstract String getPromptMessage();
+    public abstract String getPromptMessageKey();
 
-    public abstract String getUnSuccessMessage();
+    public abstract String getUnSuccessMessageKey();
 }

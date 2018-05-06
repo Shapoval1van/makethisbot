@@ -6,6 +6,7 @@ import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.telegram.objects.MessageTest;
 import com.makethisbot.bot.telegram.objects.UpdateTest;
 import com.makethisbot.bot.telegram.objects.UserTest;
+import com.makethisbot.bot.util.UserUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,12 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationConfig.class})
-public class UpdateHandlerTest {
+public class UserUtilTest {
     private final static Integer ID = 1;
 
+
     @Autowired
-    private UpdateHandler updateHandler;
+    private UserUtil userUtil;
 
     @Test
     public void getUserFromTelegramUpdate() {
@@ -36,7 +38,7 @@ public class UpdateHandlerTest {
         message.setFrom(user);
         update.setMessage(message);
 
-        User userNew = updateHandler.getUserFromTelegramUpdate(update);
+        User userNew = userUtil.getUserFromTelegramUpdate(update);
         assertEquals(ID, userNew.getId());
     }
 

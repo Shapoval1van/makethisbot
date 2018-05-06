@@ -29,12 +29,12 @@ public class EndStep extends Step {
     }
 
     @Override
-    public String getPromptMessage() {
+    public String getPromptMessageKey() {
         return null;
     }
 
     @Override
-    public String getUnSuccessMessage() {
+    public String getUnSuccessMessageKey() {
         return null;
     }
 

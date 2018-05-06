@@ -37,12 +37,12 @@ public class EmailEnterStep extends Step {
 
 
     @Override
-    public String getPromptMessage() {
-        return "Enter email please";
+    public String getPromptMessageKey() {
+        return "enter.email.prompt";
     }
 
     @Override
-    public String getUnSuccessMessage() {
-        return "Please try again";
+    public String getUnSuccessMessageKey() {
+        return "enter.email.unsuccess";
     }
 }

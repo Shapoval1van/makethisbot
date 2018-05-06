@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
 
-@ComponentScan(basePackages = {"com.makethisbot.bot.*"})
+@ComponentScan(basePackages = {"com.makethisbot.bot"})
 @PropertySource("classpath:application.properties")
-@Import({ConversationConfig.class, PersistenceConfig.class})
+@Import(PersistenceConfig.class)
 @Configuration
 public class ApplicationConfig {
 

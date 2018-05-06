@@ -37,13 +37,13 @@ public class EnterNameStep extends Step {
     }
 
     @Override
-    public String getPromptMessage() {
-        return "Please enter your name";
+    public String getPromptMessageKey() {
+        return "enter.name.prompt";
     }
 
     @Override
-    public String getUnSuccessMessage() {
-        return "It's look like a joke. Try again";
+    public String getUnSuccessMessageKey() {
+        return "enter.name.unsuccess";
     }
 
 }
