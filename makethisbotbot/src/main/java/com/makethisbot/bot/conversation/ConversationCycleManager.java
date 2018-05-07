@@ -18,7 +18,7 @@ public class ConversationCycleManager {
     protected UserRepository userRepository;
 
     @Autowired
-    @Qualifier("enterNameStep")
+    @Qualifier("nameEnterStep")
     private Step step;
 
     @Autowired
@@ -33,7 +33,8 @@ public class ConversationCycleManager {
             return "Пока все нужно будет выдть кастомную клаву";
         }
         if (!notCompletedStep.isDataValid(message)) {
-            return notCompletedStep.getUnSuccessMessageKey();
+            String key = notCompletedStep.getUnSuccessMessageKey();
+            return messagesUtil.getMessageByKey(key, userUtil.getLocalFromUser(user));
         }
         notCompletedStep.updateUserData(user, message);
         saveDataFromMessage(user);

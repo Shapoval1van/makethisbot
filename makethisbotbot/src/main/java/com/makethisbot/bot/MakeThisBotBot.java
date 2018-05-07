@@ -1,5 +1,7 @@
 package com.makethisbot.bot;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,8 +17,16 @@ import java.util.concurrent.Executors;
 @Component
 public class MakeThisBotBot extends TelegramLongPollingBot {
 
+    Logger logger = LoggerFactory.getLogger(MakeThisBotBot.class);
+
     @Value("${tread.count}")
     private int poolCount;
+
+    @Value("${bot.name}")
+    private String botName;
+
+    @Value("${token}")
+    private String token;
 
     @Autowired
     private UpdateHandler updateHandler;
@@ -34,21 +44,20 @@ public class MakeThisBotBot extends TelegramLongPollingBot {
             SendMessage sendMessage = updateHandler.processUpdate(update);
             try {
                 execute(sendMessage);
-
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         });
     }
 
     @Override
     public String getBotUsername() {
-        return "MakeThisBot";
+        return botName;
     }
 
     @Override
     public String getBotToken() {
-        return "592821253:AAH-wcAMDC3h0uRNLrvd36xH37f2E4aTL0I";
+        return token;
     }
 
 }
