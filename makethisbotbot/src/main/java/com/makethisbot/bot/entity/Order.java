@@ -16,6 +16,10 @@ public class Order {
 
     @Getter
     @Setter
+    private String type;
+
+    @Getter
+    @Setter
     private TimeStamp dueDate;
 
     private URL blobFileURL;

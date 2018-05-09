@@ -36,8 +36,8 @@ public class UpdateHandler {
             String welcomeMessageText = messagesUtil.getMessageByKey("welcome.message", userUtil.getLocalFromUser(user));
             return new SendMessage(update.getMessage().getChatId(), welcomeMessageText);
         } else if (message != null && message.hasText()) {
-            String responseText = conversationCycleManager.processMessage(message, user);
-            return new SendMessage(message.getChatId(), responseText);
+            SendMessage sendMessage = conversationCycleManager.processMessage(message, user);
+            return sendMessage;
         }
         return new SendMessage(message.getChatId(), "Something went wrong");
     }

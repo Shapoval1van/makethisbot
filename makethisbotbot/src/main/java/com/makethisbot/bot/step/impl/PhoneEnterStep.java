@@ -2,6 +2,7 @@ package com.makethisbot.bot.step.impl;
 
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.step.Step;
+import com.makethisbot.bot.step.TextStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component("phoneEnterStep")
-public class PhoneEnterStep extends Step {
+public class PhoneEnterStep extends TextStep {
 
     public static final Pattern VALID_PHONE_NUMBER_REGEX =
             Pattern.compile(

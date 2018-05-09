@@ -2,16 +2,15 @@ package com.makethisbot.bot.step.impl;
 
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.step.Step;
+import com.makethisbot.bot.step.TextStep;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 
-@Component("endStep")
-public class EndStep extends Step {
+import java.util.Locale;
 
-    @Override
-    public Step getNotCompletedStep(User user) {
-        return null;
-    }
+@Component("endStep")
+public class EndStep extends TextStep{
 
     @Override
     public boolean isCurrentStepCompleted(User user) {
@@ -30,12 +29,12 @@ public class EndStep extends Step {
 
     @Override
     public String getPromptMessageKey() {
-        return null;
+        return "";
     }
 
     @Override
     public String getUnSuccessMessageKey() {
-        return null;
+        return "";
     }
 
 }

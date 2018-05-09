@@ -2,6 +2,7 @@ package com.makethisbot.bot.step.impl;
 
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.step.Step;
+import com.makethisbot.bot.step.TextStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component("emailEnterStep")
-public class EmailEnterStep extends Step {
+public class EmailEnterStep extends TextStep {
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
