@@ -19,34 +19,27 @@ public abstract class Step {
 
     protected Logger logger = LoggerFactory.getLogger(Step.class);
 
-    protected SendMessage getNextPromptSendMessage(Long chatId, Locale locale) {
-        SendMessage sendMessage = new SendMessage();
-        String key = nextStep.getPromptMessageKey();
-        String promptText = messagesUtil.getMessageByKey(key, locale);
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(promptText);
-        if (nextStep instanceof KeyboardStep) {
-            sendMessage.setReplyMarkup(((KeyboardStep) nextStep).getKB());
-        }
-        return sendMessage;
-    }
-
-    public Step getNotCompletedStep(User user) {
+    public Step getCurrentStep(User user) {
         if (isCurrentStepCompleted(user)) {
             return getNextStepIfNotCompleted(user);
         }
         return this;
     }
+
     public Step getNextStepIfNotCompleted(User user) {
         if (nextStep == null) {
             return this; //TODO we should detect conditional wen we has last step
         }
-        return nextStep.getNotCompletedStep(user);
+        return nextStep.getCurrentStep(user);
     }
 
-    public abstract SendMessage getUnsuccessSendMessage(Long chatId, Locale locale);
+    public Step getNextStep() {
+        return nextStep;
+    }
 
     public abstract SendMessage getPromptSendMessage(Long chatId, Locale locale);
+
+    public abstract SendMessage getUnsuccessSendMessage(Long chatId, Locale locale);
 
     public abstract boolean isCurrentStepCompleted(User user);
 

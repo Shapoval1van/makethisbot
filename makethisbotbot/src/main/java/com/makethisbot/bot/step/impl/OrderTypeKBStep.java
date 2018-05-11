@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 @Component("orderTypeKBEnterStep")
 public class OrderTypeKBStep extends KeyboardStep {
@@ -25,16 +28,6 @@ public class OrderTypeKBStep extends KeyboardStep {
     @Qualifier("endStep")
     public void setStep(Step nextStep) {
         this.nextStep = nextStep;
-    }
-
-    @Override
-    public SendMessage getUnsuccessSendMessage(Long chatId, Locale locale) {
-        return null;
-    }
-
-    @Override
-    public SendMessage getPromptSendMessage(Long chatId, Locale locale) {
-        return null;
     }
 
     @Override
@@ -73,9 +66,9 @@ public class OrderTypeKBStep extends KeyboardStep {
     }
 
 
-    public ReplyKeyboardMarkup  getKB() {
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        // Create the keyboard (list of keyboard rows)
+    public ReplyKeyboard getKB() {
+         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+//         Create the keyboard (list of keyboard rows)
         List<KeyboardRow> keyboard = new ArrayList<>();
         // Create a keyboard row
         KeyboardRow row = new KeyboardRow();
@@ -83,19 +76,10 @@ public class OrderTypeKBStep extends KeyboardStep {
         row.add("Row 1 Button 1");
         row.add("Row 1 Button 2");
         row.add("Row 1 Button 3");
-        // Add the first row to the keyboard
-        keyboard.add(row);
-        // Create another keyboard row
-        row = new KeyboardRow();
-        // Set each button for the second line
-        row.add("Row 2 Button 1");
-        row.add("Row 2 Button 2");
-        row.add("Row 2 Button 3");
         // Add the second row to the keyboard
         keyboard.add(row);
-        // Set the keyboard to the markup
         keyboardMarkup.setKeyboard(keyboard);
-        // Add it to the message
+        keyboardMarkup.setOneTimeKeyboard(true);
         return keyboardMarkup;
     }
 }

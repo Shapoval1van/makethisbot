@@ -27,17 +27,17 @@ public class ConversationCycleManager {
     private UserUtil userUtil;
 
     public SendMessage processMessage(Message message, User user) {
-        Step notCompletedStep = step.getNotCompletedStep(user);
-        if (notCompletedStep instanceof EndStep) {
+        Step currentStep = step.getCurrentStep(user);
+        if (currentStep instanceof EndStep) {
             return new SendMessage(message.getChatId(), "Пока все нужно будет выдть кастомную клаву");
         }
         Locale  locale = userUtil.getLocalFromUser(user);
-        if (!notCompletedStep.isDataValid(message)) {
-            return notCompletedStep.getUnsuccessSendMessage(message.getChatId(), locale);
+        if (!currentStep.isDataValid(message)) {
+            return currentStep.getUnsuccessSendMessage(message.getChatId(), locale);
         }
-        notCompletedStep.updateUserData(user, message);
+        currentStep.updateUserData(user, message);
         saveDataFromMessage(user);
-        return notCompletedStep.getPromptSendMessage(message.getChatId(), locale);
+        return currentStep.getNextStep().getPromptSendMessage(message.getChatId(), locale);
     }
 
     private void saveDataFromMessage(User user) {
