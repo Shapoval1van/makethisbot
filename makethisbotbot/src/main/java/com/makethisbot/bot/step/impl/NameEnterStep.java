@@ -12,13 +12,6 @@ import org.telegram.telegrambots.api.objects.Message;
 @Component(value = "nameEnterStep")
 public class NameEnterStep extends TextStep {
 
-
-    @Autowired
-    @Qualifier("emailEnterStep")
-    public void setStep(Step nextStep) {
-        this.nextStep = nextStep;
-    }
-
     @Override
     public boolean isCurrentStepCompleted(User user) {
         return !StringUtils.isEmpty(user.getName());

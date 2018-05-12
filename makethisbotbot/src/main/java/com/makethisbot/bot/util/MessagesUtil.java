@@ -14,15 +14,11 @@ public class MessagesUtil {
     @Value("${messages.path}")
     protected String messagesPath;
 
-    private Locale defaultLocale = new Locale("en");
-
     public String getMessageByKey(String key, Locale locale) {
-        ResourceBundle messages = null;
-        try {
-            messages = ResourceBundle.getBundle(messagesPath, locale);
-        } catch (MissingResourceException e) {
-            messages = ResourceBundle.getBundle(messagesPath, defaultLocale);
+        if (locale.getLanguage() == "ua") {
+            locale = new Locale("ru");
         }
+        ResourceBundle messages = ResourceBundle.getBundle(messagesPath, locale);
         return messages.getString(key);
     }
 }

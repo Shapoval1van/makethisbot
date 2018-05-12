@@ -13,12 +13,6 @@ import org.telegram.telegrambots.api.objects.Message;
 @Component("orderDescribeEnterStep")
 public class OrderDescribeEnterStep extends TextStep {
 
-    @Autowired
-    @Qualifier("orderTypeKBEnterStep")
-    public void setStep(Step nextStep) {
-        this.nextStep = nextStep;
-    }
-
     @Override
     public boolean isCurrentStepCompleted(User user) {
         return user.getOrder() != null && !StringUtils.isEmpty(user.getOrder().getDescribe());

@@ -8,24 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-@Component("orderTypeKBEnterStep")
+@Component("orderTypeEnterKBStep")
 public class OrderTypeKBStep extends KeyboardStep {
 
 
     @Autowired
-    @Qualifier("endStep")
+    @Qualifier("orderDescribeEnterStep")
     public void setStep(Step nextStep) {
         this.nextStep = nextStep;
     }
@@ -67,7 +63,7 @@ public class OrderTypeKBStep extends KeyboardStep {
 
 
     public ReplyKeyboard getKB() {
-         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 //         Create the keyboard (list of keyboard rows)
         List<KeyboardRow> keyboard = new ArrayList<>();
         // Create a keyboard row

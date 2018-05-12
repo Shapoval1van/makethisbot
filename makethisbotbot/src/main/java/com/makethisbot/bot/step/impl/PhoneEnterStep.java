@@ -21,7 +21,7 @@ public class PhoneEnterStep extends TextStep {
                     Pattern.CASE_INSENSITIVE);
 
     @Autowired
-    @Qualifier("orderDescribeEnterStep")
+    @Qualifier("orderTypeEnterKBStep")
     public void setStep(Step nextStep) {
         this.nextStep = nextStep;
     }

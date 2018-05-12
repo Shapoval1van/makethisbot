@@ -37,6 +37,11 @@ public abstract class Step {
         return nextStep;
     }
 
+    public Step liinckWithNextStep(Step nextStep) {
+        this.nextStep = nextStep;
+        return this.nextStep;
+    }
+
     public abstract SendMessage getPromptSendMessage(Long chatId, Locale locale);
 
     public abstract SendMessage getUnsuccessSendMessage(Long chatId, Locale locale);
