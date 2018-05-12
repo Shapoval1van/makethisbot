@@ -3,8 +3,6 @@ package com.makethisbot.bot.step.impl;
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.step.TextStep;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.objects.Message;
@@ -30,7 +28,7 @@ public class EmailEnterStep extends TextStep {
     @Override
     public boolean isDataValid(Message message) {
         String text = message.getText();
-        if(StringUtils.isEmpty(text)) {
+        if (StringUtils.isEmpty(text)) {
             return false;
         }
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(text);

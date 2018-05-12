@@ -1,9 +1,7 @@
 package com.makethisbot.bot.step;
 
-import com.makethisbot.bot.step.impl.EndStep;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 import java.util.Locale;
 

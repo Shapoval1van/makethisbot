@@ -19,13 +19,6 @@ import java.util.List;
 @Component("orderTypeEnterKBStep")
 public class OrderTypeKBStep extends KeyboardStep {
 
-
-    @Autowired
-    @Qualifier("orderDescribeEnterStep")
-    public void setStep(Step nextStep) {
-        this.nextStep = nextStep;
-    }
-
     @Override
     public boolean isCurrentStepCompleted(User user) {
         return user.getOrder() != null && !StringUtils.isEmpty(user.getOrder().getType());

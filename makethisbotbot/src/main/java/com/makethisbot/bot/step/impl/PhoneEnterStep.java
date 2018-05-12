@@ -20,12 +20,6 @@ public class PhoneEnterStep extends TextStep {
                     "^((38|\\+38)(-)??)?(\\(?(044|093|067|073|098|050|068|063|097|096|095|066)\\)?)(-)??\\d{3}(-)??\\d{2}(-)??\\d{2}$",
                     Pattern.CASE_INSENSITIVE);
 
-    @Autowired
-    @Qualifier("orderTypeEnterKBStep")
-    public void setStep(Step nextStep) {
-        this.nextStep = nextStep;
-    }
-
     @Override
     public boolean isCurrentStepCompleted(User user) {
         return !StringUtils.isEmpty(user.getPhoneNumber());
@@ -34,7 +28,7 @@ public class PhoneEnterStep extends TextStep {
     @Override
     public boolean isDataValid(Message message) {
         String text = message.getText();
-        if(StringUtils.isEmpty(text)) {
+        if (StringUtils.isEmpty(text)) {
             return false;
         }
         Matcher matcher = VALID_PHONE_NUMBER_REGEX.matcher(text);
