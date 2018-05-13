@@ -26,5 +26,4 @@ public class UserUtil {
     public Locale getLocalFromUser(User user) {
         return new Locale(user.getLanguageCode());
     }
-
 }

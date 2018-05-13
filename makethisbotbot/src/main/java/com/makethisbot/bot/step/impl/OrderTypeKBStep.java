@@ -46,16 +46,16 @@ public class OrderTypeKBStep extends KeyboardStep {
 
     @Override
     public String getPromptMessageKey() {
-        return "test";
+        return "enter.order.type.prompt";
     }
 
     @Override
     public String getUnSuccessMessageKey() {
-        return "test";
+        return "enter.order.type.unsuccess";
     }
 
 
-    public ReplyKeyboard getKB() {
+    public ReplyKeyboard getKeyboard() {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 //         Create the keyboard (list of keyboard rows)
         List<KeyboardRow> keyboard = new ArrayList<>();

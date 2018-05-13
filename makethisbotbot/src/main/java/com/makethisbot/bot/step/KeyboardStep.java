@@ -12,7 +12,7 @@ public abstract class KeyboardStep extends Step {
         SendMessage sendMessage = new SendMessage();
         String key = getUnSuccessMessageKey();
         String text = messagesUtil.getMessageByKey(key, locale);
-        sendMessage.setReplyMarkup(((KeyboardStep) nextStep).getKB());
+        sendMessage.setReplyMarkup(((KeyboardStep) nextStep).getKeyboard());
         sendMessage.setChatId(chatId);
         sendMessage.setText(text);
         return sendMessage;
@@ -25,9 +25,9 @@ public abstract class KeyboardStep extends Step {
         String promptText = messagesUtil.getMessageByKey(key, locale);
         sendMessage.setChatId(chatId);
         sendMessage.setText(promptText);
-        sendMessage.setReplyMarkup(getKB());
+        sendMessage.setReplyMarkup(getKeyboard());
         return sendMessage;
     }
 
-    public abstract ReplyKeyboard getKB();
+    public abstract ReplyKeyboard getKeyboard();
 }

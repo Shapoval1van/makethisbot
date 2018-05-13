@@ -26,13 +26,6 @@ public abstract class Step {
         return this;
     }
 
-    public Step getNextStepIfNotCompleted(User user) {
-        if (nextStep == null) {
-            return this; //TODO we should detect conditional wen we has last step
-        }
-        return nextStep.getCurrentStep(user);
-    }
-
     public Step getNextStep() {
         return nextStep;
     }
@@ -40,6 +33,13 @@ public abstract class Step {
     public Step liinckWithNextStep(Step nextStep) {
         this.nextStep = nextStep;
         return this.nextStep;
+    }
+
+    protected Step getNextStepIfNotCompleted(User user) {
+        if (nextStep == null) {
+            return this; //TODO we should detect conditional wen we has last step
+        }
+        return nextStep.getCurrentStep(user);
     }
 
     public abstract SendMessage getPromptSendMessage(Long chatId, Locale locale);
