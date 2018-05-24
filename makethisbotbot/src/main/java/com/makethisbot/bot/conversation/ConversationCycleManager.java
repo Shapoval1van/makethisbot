@@ -1,6 +1,7 @@
 package com.makethisbot.bot.conversation;
 
 import com.makethisbot.bot.entity.User;
+import com.makethisbot.bot.menu.item.RootMenuItem;
 import com.makethisbot.bot.repository.UserRepository;
 import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.step.impl.EndStep;
@@ -26,18 +27,28 @@ public class ConversationCycleManager {
     @Autowired
     private UserUtil userUtil;
 
+    @Autowired
+    private RootMenuItem rootMenuItem;
+
     public SendMessage processMessage(Message message, User user) {
         Step currentStep = step.getCurrentStep(user);
         if (currentStep instanceof EndStep) {
-            return new SendMessage(message.getChatId(), "Пока все нужно будет выдть кастомную клаву");
+            return sendMenu(message.getChatId());
         }
-        Locale  locale = userUtil.getLocalFromUser(user);
+        Locale locale = userUtil.getLocalFromUser(user);
         if (!currentStep.isDataValid(message)) {
             return currentStep.getUnsuccessSendMessage(message.getChatId(), locale);
         }
         currentStep.updateUserData(user, message);
         saveDataFromMessage(user);
+        if (currentStep.getNextStep() instanceof EndStep) {
+            return sendMenu(message.getChatId());
+        }
         return currentStep.getNextStep().getPromptSendMessage(message.getChatId(), locale);
+    }
+
+    public SendMessage sendMenu(Long chatId) {
+        return rootMenuItem.getSendMessage().setChatId(chatId);
     }
 
     private void saveDataFromMessage(User user) {

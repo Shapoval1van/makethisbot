@@ -36,11 +36,12 @@ public class UpdateHandler {
     protected Logger logger = LoggerFactory.getLogger(UpdateHandler.class);
 
     public SendMessage processUpdate(Update update) {
+        // add is conversation ended method
         Message message = update.getMessage();
         Integer userId = userUtil.getUserIdFromUpdate(update);
         if(commandResolver.isCommandExist(update)) {
             try {
-                Command command = commandResolver.resolveCommand(update);
+                Command command = commandResolver.resolveCommand(update); // check if start
                 return command.doWork(update);
             } catch (IllegalAccessException | InstantiationException e) {
                 logger.error("Can't create instance of Command object", e);

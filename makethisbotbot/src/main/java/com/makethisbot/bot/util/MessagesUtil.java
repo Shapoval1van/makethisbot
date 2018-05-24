@@ -14,7 +14,7 @@ public class MessagesUtil {
     protected String messagesPath;
 
     public String getMessageByKey(String key, Locale locale) {
-        if (locale.getLanguage() == "ua") {
+        if (locale.getLanguage().equals("ua")) {
             locale = new Locale("ru");
         }
         ResourceBundle messages = ResourceBundle.getBundle(messagesPath, locale);

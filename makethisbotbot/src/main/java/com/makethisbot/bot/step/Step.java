@@ -30,7 +30,7 @@ public abstract class Step {
         return nextStep;
     }
 
-    public Step liinckWithNextStep(Step nextStep) {
+    public Step linkWithNextStep(Step nextStep) {
         this.nextStep = nextStep;
         return this.nextStep;
     }
