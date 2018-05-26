@@ -35,7 +35,17 @@ public class CommandResolver {
         return false;
     }
 
-    public Command resolveCommand(Update update) throws IllegalAccessException, InstantiationException {
+    /**
+     *
+     * @param update
+     * @return command from {@link Update} if command was not registered  or not present in update return null
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    public Command resolveCommand(Update update) {
+        if (!isCommandExist(update)) {
+            return null;
+        }
         MessageEntity commandMessageEntity = getMessageEntities(update).get(0);
         int startCommandIndex = commandMessageEntity.getOffset();
         int endCommandIndex = commandMessageEntity.getOffset() + commandMessageEntity.getLength();
