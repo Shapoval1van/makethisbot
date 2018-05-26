@@ -10,8 +10,6 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButto
 
 import javax.annotation.PostConstruct;
 
-import java.util.ArrayList;
-
 import static com.makethisbot.bot.menu.MenuItemsIds.ROOT_MENU_ITEM_ID;
 
 @Component
@@ -20,10 +18,18 @@ public class RootMenuItem extends KeyboardMenuItem {
     @Autowired
     MenuItem faqMenuItem;
 
+    @Autowired
+    MenuItem changeDataMenuItem;
+
+    @Autowired
+    MenuItem showOrderStatusMenuItem;
+
+
     @PostConstruct
     protected void init() {
-        childMenuItems = new ArrayList<>();
-        childMenuItems.add(faqMenuItem);
+        addChildItem(faqMenuItem);
+        addChildItem(changeDataMenuItem);
+        addChildItem(showOrderStatusMenuItem);
         super.init();
     }
 
@@ -34,17 +40,22 @@ public class RootMenuItem extends KeyboardMenuItem {
     }
 
     @Override
-    public Integer getId() {
+    public String getId() {
         return ROOT_MENU_ITEM_ID;
     }
 
     @Override
-    public String getText() {
+    public String getButtonText() {
         return "root";
     }
 
     @Override
     public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(getId() + getText());
+        return new KeyboardButton(String.format(format, getId(), getButtonText()));
+    }
+
+    @Override
+    public String getBackButtonId() {
+        return "";
     }
 }

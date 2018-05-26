@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @Configuration
-@ComponentScan(basePackages = {"com.makethisbot.bot.*"})
 @EnableMongoRepositories(basePackages = {"com.makethisbot.bot.*"})
 public class PersistenceConfig extends AbstractMongoConfiguration {
 

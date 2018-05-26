@@ -18,7 +18,7 @@ public abstract class KeyboardMenuItem implements MenuItem {
 
     private Logger logger = LoggerFactory.getLogger(KeyboardMenuItem.class);
 
-    protected KeyboardButton keyboardButton;
+    protected final static String format = "%s. %s";
 
     protected List<MenuItem> childMenuItems;
 
@@ -26,8 +26,14 @@ public abstract class KeyboardMenuItem implements MenuItem {
 
     protected List<KeyboardRow> keyboardRowList;
 
+    /**
+     * here we represent child menu items to keyboard row in order to add they to next ReplyKeyboardMarkup
+     */
     @PostConstruct
     protected void init(){
+        if(layout == null){ //if layout not init that mean we don't have any childItems
+            return;
+        }
         try {
             keyboardRowList = layout.placeKeyboardButton(childMenuItems
                     .stream()
@@ -41,7 +47,7 @@ public abstract class KeyboardMenuItem implements MenuItem {
     @Override
     public SendMessage getSendMessage() {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setText(getId() + getText());
+        sendMessage.setText(getText());
         sendMessage.setReplyMarkup(new ReplyKeyboardMarkup().setKeyboard(keyboardRowList));
         return sendMessage;
     }
@@ -52,5 +58,32 @@ public abstract class KeyboardMenuItem implements MenuItem {
             childMenuItems = new ArrayList<>();
         }
         childMenuItems.add(menuItem);
+    }
+
+    @Override
+    public List<MenuItem> getChildMenuItems() {
+        if (childMenuItems == null) {
+            childMenuItems = new ArrayList<>();
+        }
+        return childMenuItems;
+    }
+
+
+    @Override
+    public List<KeyboardRow> getKeyboardRowList() {
+        if (keyboardRowList == null) {
+            keyboardRowList = new ArrayList<>();
+        }
+        return keyboardRowList;
+    }
+
+    @Override
+    public String getText() {
+        return String.format(format, getId(), getButtonText());
+    }
+
+    @Override
+    public KeyboardButton getKeyboardButton() {
+        return new KeyboardButton(String.format(format, getId(), getButtonText()));
     }
 }
