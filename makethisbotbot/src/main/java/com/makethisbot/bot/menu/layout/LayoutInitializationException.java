@@ -1,8 +1,8 @@
 package com.makethisbot.bot.menu.layout;
 
-public class LayoutInitializationException extends Exception{
+public class LayoutInitializationException extends Exception {
 
-    LayoutInitializationException(String message){
+    LayoutInitializationException(String message) {
         super(message);
     }
 }

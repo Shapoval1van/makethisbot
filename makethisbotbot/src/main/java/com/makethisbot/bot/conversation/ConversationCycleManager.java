@@ -1,34 +1,29 @@
 package com.makethisbot.bot.conversation;
 
 import com.makethisbot.bot.entity.User;
-import com.makethisbot.bot.menu.KeyboardMenuItem;
 import com.makethisbot.bot.menu.MenuItem;
 import com.makethisbot.bot.menu.item.RootMenuItem;
 import com.makethisbot.bot.repository.UserRepository;
 import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.step.impl.EndStep;
 import com.makethisbot.bot.util.UserUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 @Component
 public class ConversationCycleManager {
 
-    private Logger logger = LoggerFactory.getLogger(ConversationCycleManager.class);
+//    private Logger logger = LoggerFactory.getLogger(ConversationCycleManager.class);
 
     @Autowired
     protected UserRepository userRepository;
@@ -69,7 +64,7 @@ public class ConversationCycleManager {
 
     protected SendMessage sendMenu(Long chatId, String messageText) {
         String id = messageText.subSequence(0, messageText.indexOf('.')).toString(); //TODO add check
-        if(backButtonsMap.keySet().contains(id)) {
+        if (backButtonsMap.keySet().contains(id)) {
             return backButtonsMap.get(id).getSendMessage().setChatId(chatId);
         }
         MenuItem menuItem = findMenuItemById(id);
@@ -81,7 +76,6 @@ public class ConversationCycleManager {
     }
 
     /**
-     *
      * @param id button Id
      * @return return null if button with this Id don't find
      */

@@ -26,6 +26,7 @@ public class RootMenuItem extends KeyboardMenuItem {
 
 
     @PostConstruct
+    @Override
     protected void init() {
         addChildItem(faqMenuItem);
         addChildItem(changeDataMenuItem);
@@ -51,7 +52,7 @@ public class RootMenuItem extends KeyboardMenuItem {
 
     @Override
     public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(String.format(format, getId(), getButtonText()));
+        return new KeyboardButton(String.format(FORMAT, getId(), getButtonText()));
     }
 
     @Override

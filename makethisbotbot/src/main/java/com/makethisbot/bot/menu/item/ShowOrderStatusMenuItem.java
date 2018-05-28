@@ -21,7 +21,7 @@ public class ShowOrderStatusMenuItem extends KeyboardMenuItem {
 
     @Override
     public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(String.format(format, getId(), getButtonText()));
+        return new KeyboardButton(String.format(FORMAT, getId(), getButtonText()));
     }
 
     @Override

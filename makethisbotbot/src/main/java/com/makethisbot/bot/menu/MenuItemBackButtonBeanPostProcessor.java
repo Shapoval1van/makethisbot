@@ -1,12 +1,7 @@
 package com.makethisbot.bot.menu;
 
-import com.makethisbot.bot.config.ApplicationConfig;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -15,8 +10,8 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import javax.annotation.Resource;
 import java.util.Map;
 
-import static com.makethisbot.bot.menu.KeyboardMenuItem.format;
-import static java.lang.String.*;
+import static com.makethisbot.bot.menu.KeyboardMenuItem.FORMAT;
+import static java.lang.String.format;
 
 @Component
 public class MenuItemBackButtonBeanPostProcessor implements BeanPostProcessor {
@@ -36,10 +31,10 @@ public class MenuItemBackButtonBeanPostProcessor implements BeanPostProcessor {
         }
         ((MenuItem) bean).getChildMenuItems().forEach(
                 childMenuItem -> {
-                    if(!StringUtils.isEmpty(childMenuItem.getBackButtonId())) {
+                    if (!StringUtils.isEmpty(childMenuItem.getBackButtonId())) {
                         backButtonsMap.put(childMenuItem.getBackButtonId(), (MenuItem) bean);
                         KeyboardRow keyboardRow = new KeyboardRow();
-                        keyboardRow.add(new KeyboardButton(format(format, childMenuItem.getBackButtonId(), "Back")));
+                        keyboardRow.add(new KeyboardButton(format(FORMAT, childMenuItem.getBackButtonId(), "Back")));
                         childMenuItem.getKeyboardRowList().add(keyboardRow);
                     }
                 }

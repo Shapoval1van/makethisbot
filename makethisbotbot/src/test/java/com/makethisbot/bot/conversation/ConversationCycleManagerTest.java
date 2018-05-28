@@ -21,9 +21,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
-
-import javax.jws.soap.SOAPBinding;
 
 import java.util.Locale;
 
@@ -34,7 +31,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestAppConfig.class})
+@ContextConfiguration(classes = TestAppConfig.class)
 public class ConversationCycleManagerTest {
 
     @Autowired
@@ -136,7 +133,7 @@ public class ConversationCycleManagerTest {
 
     @Test
     public void processMessage_shouldSendFaqMenu() {
-        String messageText = String.format(KeyboardMenuItem.format, MenuItemsIds.FAQ_MENU_ITEM_ID, "text");
+        String messageText = String.format(KeyboardMenuItem.FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID, "text");
         Order order = new Order();
         order.setType("1");
         order.setDescribe("dfgdsfgsd");

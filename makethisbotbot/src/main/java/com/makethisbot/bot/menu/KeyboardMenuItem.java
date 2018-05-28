@@ -11,14 +11,16 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.slf4j.Logger;
+
 import java.util.stream.Collectors;
 
 public abstract class KeyboardMenuItem implements MenuItem {
 
     private Logger logger = LoggerFactory.getLogger(KeyboardMenuItem.class);
 
-    public final static String format = "%s. %s";
+    public final static String FORMAT = "%s. %s";
 
     protected List<MenuItem> childMenuItems;
 
@@ -30,8 +32,8 @@ public abstract class KeyboardMenuItem implements MenuItem {
      * here we represent child menu items to keyboard row in order to add they to next ReplyKeyboardMarkup
      */
     @PostConstruct
-    protected void init(){
-        if(layout == null){ //if layout not init that mean we don't have any childItems
+    protected void init() {
+        if (layout == null) { //if layout not init that mean we don't have any childItems
             return;
         }
         try {
@@ -54,7 +56,7 @@ public abstract class KeyboardMenuItem implements MenuItem {
 
     @Override
     public void addChildItem(MenuItem menuItem) {
-        if(childMenuItems == null) {
+        if (childMenuItems == null) {
             childMenuItems = new ArrayList<>();
         }
         childMenuItems.add(menuItem);
@@ -79,11 +81,11 @@ public abstract class KeyboardMenuItem implements MenuItem {
 
     @Override
     public String getText() {
-        return String.format(format, getId(), getButtonText());
+        return String.format(FORMAT, getId(), getButtonText());
     }
 
     @Override
     public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(String.format(format, getId(), getButtonText()));
+        return new KeyboardButton(String.format(FORMAT, getId(), getButtonText()));
     }
 }

@@ -48,7 +48,7 @@ public class UpdateHandler {
             userRepository.save(user);
             String welcomeMessageText = messagesUtil.getMessageByKey("welcome.message", userUtil.getLocalFromUser(user));
             return new SendMessage(update.getMessage().getChatId(), welcomeMessageText);
-        } else if (message != null && message.hasText()) {
+        } else if (message.hasText()) {
             SendMessage sendMessage = conversationCycleManager.processMessage(message, user);
             return sendMessage;
         }

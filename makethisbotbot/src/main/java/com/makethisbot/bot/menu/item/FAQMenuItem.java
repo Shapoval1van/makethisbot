@@ -1,7 +1,6 @@
 package com.makethisbot.bot.menu.item;
 
 import com.makethisbot.bot.menu.KeyboardMenuItem;
-import com.makethisbot.bot.menu.MenuItem;
 import com.makethisbot.bot.menu.layout.LayoutManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,7 +35,7 @@ public class FAQMenuItem extends KeyboardMenuItem {
             }
 
             @Override
-            public String getText(){
+            public String getText() {
                 return "yf [eq";
             }
         });
