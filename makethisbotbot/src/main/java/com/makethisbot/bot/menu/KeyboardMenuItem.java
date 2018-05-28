@@ -18,7 +18,7 @@ public abstract class KeyboardMenuItem implements MenuItem {
 
     private Logger logger = LoggerFactory.getLogger(KeyboardMenuItem.class);
 
-    protected final static String format = "%s. %s";
+    public final static String format = "%s. %s";
 
     protected List<MenuItem> childMenuItems;
 

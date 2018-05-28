@@ -67,8 +67,8 @@ public class ConversationCycleManager {
         userRepository.save(user);
     }
 
-    public SendMessage sendMenu(Long chatId, String messageText) {
-        String id = messageText.subSequence(0, messageText.indexOf('.')).toString();
+    protected SendMessage sendMenu(Long chatId, String messageText) {
+        String id = messageText.subSequence(0, messageText.indexOf('.')).toString(); //TODO add check
         if(backButtonsMap.keySet().contains(id)) {
             return backButtonsMap.get(id).getSendMessage().setChatId(chatId);
         }
@@ -76,7 +76,7 @@ public class ConversationCycleManager {
         return menuItem.getSendMessage().setChatId(chatId);
     }
 
-    public SendMessage sendRootMenu(Long chatId) {
+    protected SendMessage sendRootMenu(Long chatId) {
         return rootMenuItem.getSendMessage().setChatId(chatId);
     }
 
@@ -85,7 +85,7 @@ public class ConversationCycleManager {
      * @param id button Id
      * @return return null if button with this Id don't find
      */
-    public MenuItem findMenuItemById(String id) {
+    protected MenuItem findMenuItemById(String id) {
         LinkedList<MenuItem> queue = new LinkedList<>();
         queue.add(rootMenuItem);
         while (!queue.isEmpty()) {

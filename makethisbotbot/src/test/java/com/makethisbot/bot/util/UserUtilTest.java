@@ -1,12 +1,12 @@
-package com.makethisbot.bot;
+package com.makethisbot.bot.util;
 
-
-import com.makethisbot.bot.config.ApplicationConfig;
+import com.makethisbot.bot.TestAppConfig;
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.telegram.objects.MessageTest;
 import com.makethisbot.bot.telegram.objects.UpdateTest;
 import com.makethisbot.bot.telegram.objects.UserTest;
-import com.makethisbot.bot.util.UserUtil;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +15,22 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertEquals;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationConfig.class})
+@ContextConfiguration(classes = {TestAppConfig.class})
 public class UserUtilTest {
     private final static Integer ID = 1;
-
 
     @Autowired
     private UserUtil userUtil;
 
-    @Test
-    public void getUserFromTelegramUpdate() {
-        UpdateTest update = new UpdateTest();
-        MessageTest message = new MessageTest();
+    private UpdateTest update;
+
+    private MessageTest message;
+
+    @Before
+    public void setUp() {
+        update = new UpdateTest();
+        message = new MessageTest();
         UserTest user = new UserTest();
         user.setFirstName("Test");
         user.setLastName("Tester");
@@ -37,10 +39,19 @@ public class UserUtilTest {
         user.setLanguageCode("ua");
         message.setFrom(user);
         update.setMessage(message);
-
-        User userNew = userUtil.getUserFromTelegramUpdate(update);
-        assertEquals(ID, userNew.getId());
     }
 
+    @Test
+    public void getUserFromTelegramUpdateTest() {
+        User userNew = userUtil.getUserFromTelegramUpdate(update);
+        assertEquals(ID, userNew.getId());
+        assertEquals("Tester", userNew.getTelegramLastName());
+        assertEquals("Test", userNew.getTelegramFirsName());
+    }
+
+    @Test
+    public void getUserIdFromUpdate() throws Exception {
+        assertEquals(ID.intValue(), userUtil.getUserIdFromUpdate(update));
+    }
 
 }
