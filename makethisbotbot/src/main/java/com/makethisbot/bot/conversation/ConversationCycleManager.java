@@ -9,6 +9,8 @@ import com.makethisbot.bot.step.impl.EndStep;
 import com.makethisbot.bot.util.UserUtil;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -23,7 +25,7 @@ import java.util.Map;
 @Component
 public class ConversationCycleManager {
 
-//    private Logger logger = LoggerFactory.getLogger(ConversationCycleManager.class);
+    private Logger logger = LoggerFactory.getLogger(ConversationCycleManager.class);
 
     @Autowired
     protected UserRepository userRepository;
@@ -43,36 +45,38 @@ public class ConversationCycleManager {
 
     public SendMessage processMessage(Message message, User user) {
         Step currentStep = step.getCurrentStep(user);
-        if (currentStep instanceof EndStep) {
-            return sendMenu(message.getChatId(), message.getText());
+        if (!(currentStep instanceof EndStep)) {
+            return processSteps(currentStep, user, message);
         }
+        return sendMenu(message.getChatId(), message.getText());
+    }
+
+    protected SendMessage processSteps(Step currentStep, User user, Message message) {
         Locale locale = userUtil.getLocalFromUser(user);
         if (!currentStep.isDataValid(message)) {
             return currentStep.getUnsuccessSendMessage(message.getChatId(), locale);
         }
         currentStep.updateUserData(user, message);
-        saveDataFromMessage(user);
-        if (currentStep.getNextStep() instanceof EndStep) {
-            return sendRootMenu(message.getChatId());
-        }
+        userRepository.save(user);
         return currentStep.getNextStep().getPromptSendMessage(message.getChatId(), locale);
     }
 
-    private void saveDataFromMessage(User user) {
-        userRepository.save(user);
-    }
-
     protected SendMessage sendMenu(Long chatId, String messageText) {
-        String id = messageText.subSequence(0, messageText.indexOf('.')).toString(); //TODO add check
+        int index = messageText.indexOf('.');
+        if (index == -1) {
+            processWrongMessage(chatId);
+        }
+        String id = messageText.subSequence(0, index).toString(); //TODO add check
         if (backButtonsMap.keySet().contains(id)) {
             return backButtonsMap.get(id).getSendMessage().setChatId(chatId);
         }
         MenuItem menuItem = findMenuItemById(id);
-        return menuItem.getSendMessage().setChatId(chatId);
+        return menuItem == null ? processWrongMessage(chatId) : menuItem.getSendMessage().setChatId(chatId);
     }
 
-    protected SendMessage sendRootMenu(Long chatId) {
-        return rootMenuItem.getSendMessage().setChatId(chatId);
+    protected SendMessage processWrongMessage(Long chatId) {
+        logger.warn("wrong menu Id"); //TODO change it
+        return new SendMessage(chatId, "Something went wrong please try again");
     }
 
     /**

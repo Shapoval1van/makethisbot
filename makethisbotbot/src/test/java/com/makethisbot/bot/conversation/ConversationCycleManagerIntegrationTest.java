@@ -6,6 +6,7 @@ import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.menu.KeyboardMenuItem;
 import com.makethisbot.bot.menu.MenuItem;
 import com.makethisbot.bot.menu.MenuItemsIds;
+import com.makethisbot.bot.menu.item.RootMenuItem;
 import com.makethisbot.bot.repository.UserRepository;
 import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.telegram.objects.MessageTest;
@@ -32,13 +33,16 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestAppConfig.class)
-public class ConversationCycleManagerTest {
+public class ConversationCycleManagerIntegrationTest {
 
     @Autowired
     protected UserRepository userRepository;
 
     @Autowired
     protected MenuItem faqMenuItem;
+
+    @Autowired
+    protected MenuItem rootMenuItem;
 
     @Autowired
     protected ConversationCycleManager conversationCycleManager;
@@ -120,15 +124,15 @@ public class ConversationCycleManagerTest {
         Order order = new Order();
         order.setType("1");
         ConversationCycleManager conversationCycleManagerSpy = Mockito.spy(conversationCycleManager);
-        doReturn(new SendMessage()).when(conversationCycleManagerSpy).sendRootMenu(chatId);
         user.setName(name);
         user.setPhoneNumber(phone);
         user.setEmail("test@gmail.com");
         user.setOrder(order);
         userRepository.save(user);
         message.setText(phone);
-        conversationCycleManagerSpy.processMessage(message, user);
-        verify(conversationCycleManagerSpy, times(1)).sendRootMenu(chatId);
+        SendMessage sendMessage = conversationCycleManagerSpy.processMessage(message, user);
+        ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup)sendMessage.getReplyMarkup();
+        assertEquals(rootMenuItem.getKeyboardRowList().size(), replyKeyboardMarkup.getKeyboard().size());
     }
 
     @Test

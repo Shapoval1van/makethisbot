@@ -35,4 +35,8 @@ public class MessageTest extends Message {
     public void setChatId(Long chatId) {
         this.chatId = chatId;
     }
+
+    public boolean hasText() {
+        return text != null && !text.isEmpty();
+    }
 }

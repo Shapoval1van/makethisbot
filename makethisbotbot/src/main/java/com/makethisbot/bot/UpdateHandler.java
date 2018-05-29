@@ -19,7 +19,7 @@ import org.telegram.telegrambots.api.objects.Update;
 public class UpdateHandler {
 
     @Autowired
-    protected UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private ConversationCycleManager conversationCycleManager;
@@ -49,8 +49,7 @@ public class UpdateHandler {
             String welcomeMessageText = messagesUtil.getMessageByKey("welcome.message", userUtil.getLocalFromUser(user));
             return new SendMessage(update.getMessage().getChatId(), welcomeMessageText);
         } else if (message.hasText()) {
-            SendMessage sendMessage = conversationCycleManager.processMessage(message, user);
-            return sendMessage;
+            return conversationCycleManager.processMessage(message, user);
         }
         return new SendMessage(message.getChatId(), "Something went wrong");
     }
