@@ -3,6 +3,7 @@ package com.makethisbot.bot.step.impl;
 import com.makethisbot.bot.entity.Order;
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.step.KeyboardStep;
+import com.makethisbot.bot.step.OrderType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.objects.Message;
@@ -12,6 +13,14 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
+
+import static com.makethisbot.bot.step.OrderType.BUSINESS;
+import static com.makethisbot.bot.step.OrderType.DEFAULT;
+import static com.makethisbot.bot.step.OrderType.FUN;
+import static com.makethisbot.bot.step.OrderType.GAME;
+import static com.makethisbot.bot.step.OrderType.ORGANIZER;
 
 @Component("orderTypeEnterKBStep")
 public class OrderTypeKBStep extends KeyboardStep {
@@ -22,14 +31,13 @@ public class OrderTypeKBStep extends KeyboardStep {
     }
 
     @Override
-    public boolean isDataValid(Message message) {
-        String text = message.getText();
-        return !StringUtils.isEmpty(text); //TODO add more complicated validation;
-    }
-
-    @Override
     public User updateUserData(User user, Message message) {
-        String type = message.getText();
+        String messageText = message.getText();
+        String[] splittedMessageText = messageText.split(Pattern.quote("."));
+        int buttonIndex = Integer.parseInt(splittedMessageText[0]);
+        OrderType orderType = findOrderTypeById(buttonIndex);
+        String type = orderType.name();
+
         Order order = user.getOrder();
         if (order == null) {
             order = new Order();
@@ -52,20 +60,36 @@ public class OrderTypeKBStep extends KeyboardStep {
     }
 
 
-    public ReplyKeyboard getKeyboard() {
+    public ReplyKeyboard getKeyboard(Locale locale) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-//         Create the keyboard (list of keyboard rows)
         List<KeyboardRow> keyboard = new ArrayList<>();
-        // Create a keyboard row
         KeyboardRow row = new KeyboardRow();
-        // Set each button, you can also use KeyboardButton objects if you need something else than text
-        row.add("Row 1 Button 1");
-        row.add("Row 1 Button 2");
-        row.add("Row 1 Button 3");
-        // Add the second row to the keyboard
+        getKeyboardTitleKey().forEach(key -> {
+            String message = messagesUtil.getMessageByKey(key, locale);
+            row.add(String.format(FORMAT, getKeyboardTitleKey().indexOf(key) + 1, message));
+        });
         keyboard.add(row);
         keyboardMarkup.setKeyboard(keyboard);
-//        keyboardMarkup.setOneTimeKeyboard(true);
         return keyboardMarkup;
+    }
+
+    @Override
+    public List<String> getKeyboardTitleKey() {
+        List<String> keyBoardTitleKey = new ArrayList<>();
+        keyBoardTitleKey.add(BUSINESS.getKey());
+        keyBoardTitleKey.add(GAME.getKey());
+        keyBoardTitleKey.add(FUN.getKey());
+        keyBoardTitleKey.add(ORGANIZER.getKey());
+        keyBoardTitleKey.add(DEFAULT.getKey());
+        return keyBoardTitleKey;
+    }
+
+    private OrderType findOrderTypeById(int buttonIndex) {
+        for (OrderType orderType : OrderType.values()) {
+            if (orderType.getId() == buttonIndex) {
+                return orderType;
+            }
+        }
+        return DEFAULT;
     }
 }
