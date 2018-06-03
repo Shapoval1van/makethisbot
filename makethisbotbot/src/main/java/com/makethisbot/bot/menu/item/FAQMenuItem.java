@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 import static com.makethisbot.bot.menu.MenuItemsIds.FAQ_MENU_ITEM_ID;
+import static com.makethisbot.bot.menu.MenuItemsIds.FAQ_MENU_QUESTION1_ITEM_ID;
 import static com.makethisbot.bot.menu.MenuItemsIds.TO_FAQ_BACK_BUTTON_ID;
 import static com.makethisbot.bot.menu.MenuItemsIds.TO_ROOT_BACK_BUTTON_ID;
 
@@ -21,22 +22,22 @@ public class FAQMenuItem extends KeyboardMenuItem {
         addChildItem(new KeyboardMenuItem() {
             @Override
             public String getId() {
-                return ":game_die:";
+                return FAQ_MENU_QUESTION1_ITEM_ID.getId();
             }
 
             @Override
-            public String getButtonText() {
-                return "Whay I do this";
+            public String getButtonTextKey() {
+                return "menu.faq.question1.button";
             }
 
             @Override
             public String getBackButtonId() {
-                return TO_FAQ_BACK_BUTTON_ID;
+                return TO_FAQ_BACK_BUTTON_ID.getId();
             }
 
             @Override
-            public String getText() {
-                return "yf [eq";
+            public String getTextKey() {
+                return "menu.faq.question1";
             }
         });
         super.init();
@@ -50,17 +51,21 @@ public class FAQMenuItem extends KeyboardMenuItem {
 
     @Override
     public String getId() {
-        return FAQ_MENU_ITEM_ID;
+        return FAQ_MENU_ITEM_ID.getId();
     }
 
     @Override
-    public String getButtonText() {
-        return "FAQ";
+    public String getButtonTextKey() {
+        return "menu.faq.button";
     }
 
     @Override
     public String getBackButtonId() {
-        return TO_ROOT_BACK_BUTTON_ID;
+        return TO_ROOT_BACK_BUTTON_ID.getId();
     }
 
+    @Override
+    public String getTextKey() {
+        return "menu.faq";
+    }
 }

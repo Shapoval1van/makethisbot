@@ -11,21 +11,21 @@ import static com.makethisbot.bot.menu.MenuItemsIds.SHOW_ORDER_STATUS_MENU_ITEM_
 public class ShowOrderStatusMenuItem extends KeyboardMenuItem {
     @Override
     public String getId() {
-        return SHOW_ORDER_STATUS_MENU_ITEM_ID;
+        return SHOW_ORDER_STATUS_MENU_ITEM_ID.getId();
     }
 
     @Override
-    public String getButtonText() {
-        return "Show current order status";
+    public String getButtonTextKey() {
+        return "menu.show.order.status.button";
     }
 
     @Override
     public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(String.format(FORMAT, getId(), getButtonText()));
+        return new KeyboardButton(String.format(FORMAT, getId(), getButtonTextKey()));
     }
 
     @Override
     public String getBackButtonId() {
-        return TO_ROOT_BACK_BUTTON_ID;
+        return TO_ROOT_BACK_BUTTON_ID.getId();
     }
 }

@@ -41,10 +41,14 @@ public class MakeThisBotBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         executorService.submit(() -> {
-            SendMessage sendMessage = updateHandler.processUpdate(update);
             try {
+                SendMessage sendMessage = updateHandler.processUpdate(update);
                 execute(sendMessage);
             } catch (TelegramApiException e) {
+                logger.error("Was occurred telegram telegram api exception. userId = {}", update.getMessage().getFrom().getId());
+                logger.error(e.getMessage(), e);
+            } catch (Exception e) {
+                logger.error("UserId =  {}", update.getMessage().getFrom().getId());
                 logger.error(e.getMessage(), e);
             }
         });

@@ -12,22 +12,27 @@ public class ChangeDataMenuItem extends KeyboardMenuItem {
 
     @Override
     public String getId() {
-        return CHANGE_DATA_MENU_ITEM_ID;
+        return CHANGE_DATA_MENU_ITEM_ID.getId();
     }
 
     @Override
-    public String getButtonText() {
-        return "Change contact data";
+    public String getButtonTextKey() {
+        return "menu.change.data.button";
     }
 
     @Override
     public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(String.format(FORMAT, getId(), getButtonText()));
+        return new KeyboardButton(String.format(FORMAT, getId(), getButtonTextKey()));
     }
 
     @Override
     public String getBackButtonId() {
-        return TO_ROOT_BACK_BUTTON_ID;
+        return TO_ROOT_BACK_BUTTON_ID.getId();
+    }
+
+    @Override
+    public String getTextKey() {
+        return "menu.change.data";
     }
 
 }

@@ -7,8 +7,6 @@ import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.repository.UserRepository;
 import com.makethisbot.bot.util.MessagesUtil;
 import com.makethisbot.bot.util.UserUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -32,8 +30,6 @@ public class UpdateHandler {
 
     @Autowired
     private CommandResolver commandResolver;
-
-    protected Logger logger = LoggerFactory.getLogger(UpdateHandler.class);
 
     public SendMessage processUpdate(Update update) {
         Message message = update.getMessage();

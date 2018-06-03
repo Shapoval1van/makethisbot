@@ -7,17 +7,13 @@ import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import javax.annotation.Resource;
-import java.util.Map;
-
 import static com.makethisbot.bot.menu.KeyboardMenuItem.FORMAT;
 import static java.lang.String.format;
 
 @Component
 public class MenuItemBackButtonBeanPostProcessor implements BeanPostProcessor {
 
-    @Resource
-    private Map<String, MenuItem> backButtonsMap;
+    protected BackButtons backButtons = BackButtons.getBackButtonsInstance();
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -32,9 +28,9 @@ public class MenuItemBackButtonBeanPostProcessor implements BeanPostProcessor {
         ((MenuItem) bean).getChildMenuItems().forEach(
                 childMenuItem -> {
                     if (!StringUtils.isEmpty(childMenuItem.getBackButtonId())) {
-                        backButtonsMap.put(childMenuItem.getBackButtonId(), (MenuItem) bean);
+                        backButtons.getBackButtonsMap().put(childMenuItem.getBackButtonId(), (MenuItem) bean);
                         KeyboardRow keyboardRow = new KeyboardRow();
-                        keyboardRow.add(new KeyboardButton(format(FORMAT, childMenuItem.getBackButtonId(), "Back")));
+                        keyboardRow.add(new KeyboardButton(format(FORMAT, childMenuItem.getBackButtonId(), "menu.back.button")));
                         childMenuItem.getKeyboardRowList().add(keyboardRow);
                     }
                 }

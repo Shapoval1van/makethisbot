@@ -42,21 +42,27 @@ public class RootMenuItem extends KeyboardMenuItem {
 
     @Override
     public String getId() {
-        return ROOT_MENU_ITEM_ID;
+        return ROOT_MENU_ITEM_ID.getId();
     }
 
     @Override
-    public String getButtonText() {
-        return "root";
+    public String getButtonTextKey() {
+            return "menu.root.button";
     }
 
     @Override
     public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(String.format(FORMAT, getId(), getButtonText()));
+        return new KeyboardButton(String.format(FORMAT, getId(), getButtonTextKey()));
     }
 
     @Override
     public String getBackButtonId() {
         return "";
     }
+
+    @Override
+    public String getTextKey() {
+        return "menu.root";
+    }
+
 }

@@ -1,10 +1,14 @@
 package com.makethisbot.bot.util;
 
+import com.makethisbot.bot.menu.MenuItemsIds;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
+
+import static com.makethisbot.bot.menu.KeyboardMenuItem.SEPARATOR;
 
 @Component
 public class MessagesUtil {
@@ -19,5 +23,23 @@ public class MessagesUtil {
         }
         ResourceBundle messages = ResourceBundle.getBundle(messagesPath, locale);
         return messages.getString(key);
+    }
+
+    public String getLocalizedButtonMenuText(String buttonMenuText, Locale locale) {
+        if (!isButtonMenuTextValid(buttonMenuText)) {
+            return "Some error occurrence";
+        }
+        String[] splittedButtonMenuText = buttonMenuText.split(Pattern.quote(SEPARATOR));
+        return splittedButtonMenuText[0] + SEPARATOR +   getMessageByKey(splittedButtonMenuText[1], locale);
+    }
+
+    protected boolean isButtonMenuTextValid(String buttonMenuText) {
+        String[] splittedButtonMenuText = buttonMenuText.split(Pattern.quote(SEPARATOR));
+        for (MenuItemsIds menuItemsIds : MenuItemsIds.values()) {
+            if (menuItemsIds.getId().equals(splittedButtonMenuText[0])) {
+                return true;
+            }
+        }
+        return false;
     }
 }

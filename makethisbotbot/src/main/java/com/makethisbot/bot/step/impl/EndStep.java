@@ -43,7 +43,7 @@ public class EndStep extends TextStep {
 
     @Override
     public SendMessage getPromptSendMessage(Long chatId, Locale locale) {
-        return rootMenuItem.getSendMessage().setChatId(chatId); //link end step with menu whe all ste is completed instead prompt to next step we send root menu item
+        return rootMenuItem.getSendMessage(locale).setChatId(chatId); //link end step with menu whe all ste is completed instead prompt to next step we send root menu item
     }
 
 }

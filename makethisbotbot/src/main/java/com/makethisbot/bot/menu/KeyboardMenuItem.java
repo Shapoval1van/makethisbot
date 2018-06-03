@@ -2,7 +2,9 @@ package com.makethisbot.bot.menu;
 
 import com.makethisbot.bot.menu.layout.LayoutInitializationException;
 import com.makethisbot.bot.menu.layout.LayoutManager;
+import com.makethisbot.bot.util.MessagesUtil;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -13,14 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
-
-import java.util.stream.Collectors;
+import java.util.Locale;
+import static java.util.stream.Collectors.toList;
 
 public abstract class KeyboardMenuItem implements MenuItem {
 
     private Logger logger = LoggerFactory.getLogger(KeyboardMenuItem.class);
 
-    public final static String FORMAT = "%s. %s";
+    public final static String SEPARATOR = " ";
+    public final static String FORMAT = "%s" + SEPARATOR + "%s";
+
+    @Autowired
+    private MessagesUtil messagesUtil;
 
     protected List<MenuItem> childMenuItems;
 
@@ -29,7 +35,7 @@ public abstract class KeyboardMenuItem implements MenuItem {
     protected List<KeyboardRow> keyboardRowList;
 
     /**
-     * here we represent child menu items to keyboard row in order to add they to next ReplyKeyboardMarkup
+     * here we represent child menu items to keyboard row using {@link #layout}
      */
     @PostConstruct
     protected void init() {
@@ -40,17 +46,17 @@ public abstract class KeyboardMenuItem implements MenuItem {
             keyboardRowList = layout.placeKeyboardButton(childMenuItems
                     .stream()
                     .map(MenuItem::getKeyboardButton)
-                    .collect(Collectors.toList()));
+                    .collect(toList()));
         } catch (LayoutInitializationException e) {
             logger.error(e.getMessage(), e);
         }
     }
 
     @Override
-    public SendMessage getSendMessage() {
+    public SendMessage getSendMessage(Locale locale) { //we get SendMessage with already localized text field
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setText(getText());
-        sendMessage.setReplyMarkup(new ReplyKeyboardMarkup().setKeyboard(keyboardRowList));
+        sendMessage.setText(messagesUtil.getMessageByKey(getTextKey(), locale));
+        sendMessage.setReplyMarkup(new ReplyKeyboardMarkup().setKeyboard(getLocalizedKeyboardButtons(locale)));
         return sendMessage;
     }
 
@@ -80,12 +86,29 @@ public abstract class KeyboardMenuItem implements MenuItem {
     }
 
     @Override
-    public String getText() {
-        return String.format(FORMAT, getId(), getButtonText());
+    public String getTextKey() { //default  message text same that button text
+        return getButtonTextKey();
     }
 
     @Override
     public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(String.format(FORMAT, getId(), getButtonText()));
+        return new KeyboardButton(String.format(FORMAT, getId(), getButtonTextKey()));
+    }
+
+    protected List<KeyboardRow> getLocalizedKeyboardButtons(Locale locale) {
+        List<KeyboardRow> localizedKeyboardRowList = getKeyboardRowListCopy();
+        for (KeyboardRow keyboardRow : localizedKeyboardRowList) {
+            for (KeyboardButton keyboardButton : keyboardRow) {
+                keyboardButton.setText(messagesUtil.getLocalizedButtonMenuText(keyboardButton.getText(), locale));
+            }
+        }
+        return localizedKeyboardRowList;
+    }
+
+    protected List<KeyboardRow> getKeyboardRowListCopy() {
+        return keyboardRowList.stream().map(keyboardRow -> keyboardRow.stream().map(keyboardButton ->
+                new KeyboardButton(keyboardButton.getText()))
+                .collect(new KeyboardRowCollector()))
+                .collect(toList());
     }
 }

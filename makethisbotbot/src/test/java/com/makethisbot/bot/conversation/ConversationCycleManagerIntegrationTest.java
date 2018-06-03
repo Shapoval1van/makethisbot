@@ -11,6 +11,7 @@ import com.makethisbot.bot.repository.UserRepository;
 import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.telegram.objects.MessageTest;
 import com.makethisbot.bot.telegram.objects.UserTest;
+import com.makethisbot.bot.util.UserUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,9 @@ public class ConversationCycleManagerIntegrationTest {
 
     @Autowired
     protected MenuItem rootMenuItem;
+
+    @Autowired
+    protected UserUtil userUtil;
 
     @Autowired
     protected ConversationCycleManager conversationCycleManager;
@@ -137,7 +141,7 @@ public class ConversationCycleManagerIntegrationTest {
 
     @Test
     public void processMessage_shouldSendFaqMenu() {
-        String messageText = String.format(KeyboardMenuItem.FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID, "text");
+        String messageText = String.format(KeyboardMenuItem.FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), "text");
         Order order = new Order();
         order.setType("1");
         order.setDescribe("dfgdsfgsd");
@@ -149,7 +153,7 @@ public class ConversationCycleManagerIntegrationTest {
         userRepository.save(user);
         message.setText(messageText);
         SendMessage sendMessage = conversationCycleManagerSpy.processMessage(message, user);
-        verify(conversationCycleManagerSpy, times(1)).sendMenu(chatId, messageText);
+        verify(conversationCycleManagerSpy, times(1)).sendMenu(chatId, messageText, userUtil.getLocalFromUser(user));
         ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup)sendMessage.getReplyMarkup();
         assertEquals(faqMenuItem.getKeyboardRowList().size(), replyKeyboardMarkup.getKeyboard().size());
     }
