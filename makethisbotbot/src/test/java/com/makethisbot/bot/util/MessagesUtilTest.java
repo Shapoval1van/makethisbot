@@ -8,7 +8,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Locale;
 
-import static com.makethisbot.bot.menu.KeyboardMenuItem.FORMAT;
+import static com.makethisbot.bot.menu.util.Constants.MENU_BUTTON_TEXT_FORMAT;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.doReturn;
 
@@ -25,8 +25,8 @@ public class MessagesUtilTest {
         String message = "message";
         doReturn(message).when(messagesUtil).getMessageByKey(messageKey, locale);
         String localizedMessage = messagesUtil.getLocalizedButtonMenuText
-                (String.format(FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), messageKey), locale);
-        assertEquals((String.format(FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), message)), localizedMessage);
+                (String.format(MENU_BUTTON_TEXT_FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), messageKey), locale);
+        assertEquals((String.format(MENU_BUTTON_TEXT_FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), message)), localizedMessage);
     }
 
     @Test

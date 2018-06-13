@@ -1,4 +1,4 @@
-package com.makethisbot.bot.menu;
+package com.makethisbot.bot.menu.util;
 
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;

@@ -1,16 +1,13 @@
 package com.makethisbot.bot.conversation;
 
 import com.makethisbot.bot.entity.User;
-import com.makethisbot.bot.menu.BackButtons;
+import com.makethisbot.bot.menu.ContainerMenuItem;
 import com.makethisbot.bot.menu.MenuItem;
-import com.makethisbot.bot.menu.item.RootMenuItem;
 import com.makethisbot.bot.repository.UserRepository;
 import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.step.impl.EndStep;
 import com.makethisbot.bot.util.MessagesUtil;
 import com.makethisbot.bot.util.UserUtil;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +16,12 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 
+import javax.annotation.Resource;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.makethisbot.bot.menu.KeyboardMenuItem.SEPARATOR;
+import static com.makethisbot.bot.menu.util.Constants.MENU_BUTTON_TEXT_SEPARATOR;
 
 @Component
 public class ConversationCycleManager {
@@ -41,12 +39,13 @@ public class ConversationCycleManager {
     private UserUtil userUtil;
 
     @Autowired
-    private RootMenuItem rootMenuItem;
+    private MenuItem rootMenuItem;
 
     @Autowired
     private MessagesUtil messagesUtil;
 
-    private Map<String, MenuItem> backButtonsMap = BackButtons.getBackButtonsInstance().getBackButtonsMap();
+    @Resource
+    private Map<String, MenuItem> backButtonsMap;
 
     public SendMessage processMessage(Message message, User user) {
         Step currentStep = step.getCurrentStep(user);
@@ -54,7 +53,7 @@ public class ConversationCycleManager {
             return processSteps(currentStep, user, message);
         }
         Locale locale = userUtil.getLocalFromUser(user);
-        return sendMenu(message.getChatId(), message.getText(), locale);
+        return processMenu(message.getChatId(), message.getText(), locale);
     }
 
     protected SendMessage processSteps(Step currentStep, User user, Message message) {
@@ -67,22 +66,14 @@ public class ConversationCycleManager {
         return currentStep.getNextStep().getPromptSendMessage(message.getChatId(), locale);
     }
 
-    protected SendMessage sendMenu(Long chatId, String messageText, Locale locale) {
-        int index = messageText.indexOf(SEPARATOR);
+    protected SendMessage processMenu(Long chatId, String messageText, Locale locale) {
+        int index = messageText.indexOf(MENU_BUTTON_TEXT_SEPARATOR);
         if (index == -1) {
-            processWrongMessage(chatId, messageText, locale);
+            return processWrongMessage(chatId, messageText, locale);
         }
-        String id = messageText.subSequence(0, index).toString(); //TODO add check
-        if (backButtonsMap.keySet().contains(id)) {
-            return backButtonsMap.get(id).getSendMessage(locale).setChatId(chatId);
-        }
+        String id = messageText.subSequence(0, index).toString();
         MenuItem menuItem = findMenuItemById(id);
         return menuItem == null ? processWrongMessage(chatId, messageText, locale) : menuItem.getSendMessage(locale).setChatId(chatId);
-    }
-
-    protected SendMessage processWrongMessage(Long chatId, String messageText, Locale locale) {
-        logger.warn("wrong menu Id was sanded from chat - {}, message - {}", chatId, messageText); //TODO change it
-        return new SendMessage(chatId, messagesUtil.getMessageByKey("menu.error", locale));
     }
 
     /**
@@ -90,6 +81,9 @@ public class ConversationCycleManager {
      * @return return null if button with this Id don't find
      */
     protected MenuItem findMenuItemById(String id) {
+        if (backButtonsMap.keySet().contains(id)) {
+            return backButtonsMap.get(id);
+        }
         LinkedList<MenuItem> queue = new LinkedList<>();
         queue.add(rootMenuItem);
         while (!queue.isEmpty()) {
@@ -97,10 +91,15 @@ public class ConversationCycleManager {
             if (menuItem.getId().equals(id)) {
                 return menuItem;
             }
-            if (menuItem.getChildMenuItems() != null) {
-                queue.addAll(menuItem.getChildMenuItems());
+            if (menuItem instanceof ContainerMenuItem) {
+                queue.addAll(((ContainerMenuItem) menuItem).getChildMenuItems());
             }
         }
         return null;
+    }
+
+    protected SendMessage processWrongMessage(Long chatId, String messageText, Locale locale) {
+        logger.warn("wrong menu Id was sanded from chat - {}, message - {}", chatId, messageText); //TODO change it
+        return new SendMessage(chatId, messagesUtil.getMessageByKey("menu.error", locale));
     }
 }

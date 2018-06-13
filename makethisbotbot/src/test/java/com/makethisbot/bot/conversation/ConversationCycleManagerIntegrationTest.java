@@ -3,10 +3,9 @@ package com.makethisbot.bot.conversation;
 import com.makethisbot.bot.TestAppConfig;
 import com.makethisbot.bot.entity.Order;
 import com.makethisbot.bot.entity.User;
-import com.makethisbot.bot.menu.KeyboardMenuItem;
+import com.makethisbot.bot.menu.ContainerMenuItem;
 import com.makethisbot.bot.menu.MenuItem;
 import com.makethisbot.bot.menu.MenuItemsIds;
-import com.makethisbot.bot.menu.item.RootMenuItem;
 import com.makethisbot.bot.repository.UserRepository;
 import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.telegram.objects.MessageTest;
@@ -26,9 +25,9 @@ import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 import java.util.Locale;
 
+import static com.makethisbot.bot.menu.util.Constants.MENU_BUTTON_TEXT_FORMAT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -40,7 +39,7 @@ public class ConversationCycleManagerIntegrationTest {
     protected UserRepository userRepository;
 
     @Autowired
-    protected MenuItem faqMenuItem;
+    protected MenuItem faqMenuItemContainer;
 
     @Autowired
     protected MenuItem rootMenuItem;
@@ -135,13 +134,13 @@ public class ConversationCycleManagerIntegrationTest {
         userRepository.save(user);
         message.setText(phone);
         SendMessage sendMessage = conversationCycleManagerSpy.processMessage(message, user);
-        ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup)sendMessage.getReplyMarkup();
-        assertEquals(rootMenuItem.getKeyboardRowList().size(), replyKeyboardMarkup.getKeyboard().size());
+        ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) sendMessage.getReplyMarkup();
+        assertEquals(((ContainerMenuItem) rootMenuItem).getKeyboardRowList().size(), replyKeyboardMarkup.getKeyboard().size());
     }
 
     @Test
     public void processMessage_shouldSendFaqMenu() {
-        String messageText = String.format(KeyboardMenuItem.FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), "text");
+        String messageText = String.format(MENU_BUTTON_TEXT_FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), "text");
         Order order = new Order();
         order.setType("1");
         order.setDescribe("dfgdsfgsd");
@@ -153,8 +152,8 @@ public class ConversationCycleManagerIntegrationTest {
         userRepository.save(user);
         message.setText(messageText);
         SendMessage sendMessage = conversationCycleManagerSpy.processMessage(message, user);
-        verify(conversationCycleManagerSpy, times(1)).sendMenu(chatId, messageText, userUtil.getLocalFromUser(user));
-        ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup)sendMessage.getReplyMarkup();
-        assertEquals(faqMenuItem.getKeyboardRowList().size(), replyKeyboardMarkup.getKeyboard().size());
+        verify(conversationCycleManagerSpy, times(1)).processMenu(chatId, messageText, userUtil.getLocalFromUser(user));
+        ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) sendMessage.getReplyMarkup();
+        assertEquals(((ContainerMenuItem) faqMenuItemContainer).getKeyboardRowList().size(), replyKeyboardMarkup.getKeyboard().size());
     }
 }

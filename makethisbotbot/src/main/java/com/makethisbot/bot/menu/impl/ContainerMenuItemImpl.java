@@ -1,32 +1,26 @@
-package com.makethisbot.bot.menu;
+package com.makethisbot.bot.menu.impl;
 
+import com.makethisbot.bot.menu.ContainerMenuItem;
+import com.makethisbot.bot.menu.MenuItem;
 import com.makethisbot.bot.menu.layout.LayoutInitializationException;
 import com.makethisbot.bot.menu.layout.LayoutManager;
+import com.makethisbot.bot.menu.util.KeyboardRowCollector;
 import com.makethisbot.bot.util.MessagesUtil;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
 import java.util.Locale;
+
+import static com.makethisbot.bot.menu.util.Constants.MENU_BUTTON_TEXT_FORMAT;
 import static java.util.stream.Collectors.toList;
 
-public abstract class KeyboardMenuItem implements MenuItem {
-
-    private Logger logger = LoggerFactory.getLogger(KeyboardMenuItem.class);
-
-    public final static String SEPARATOR = " ";
-    public final static String FORMAT = "%s" + SEPARATOR + "%s";
-
-    @Autowired
-    private MessagesUtil messagesUtil;
+public class ContainerMenuItemImpl extends MenuItemImpl implements ContainerMenuItem {
 
     protected List<MenuItem> childMenuItems;
 
@@ -34,10 +28,26 @@ public abstract class KeyboardMenuItem implements MenuItem {
 
     protected List<KeyboardRow> keyboardRowList;
 
+    protected String backButtonId;
+
+    public ContainerMenuItemImpl(@NotNull String textKey,
+                                 @NotNull String id,
+                                 @NotNull String buttonTextKey,
+                                 @NotNull String backButtonId,
+                                 @NotNull List<MenuItem> childMenuItems,
+                                 @NotNull LayoutManager layout,
+                                 @NotNull MessagesUtil messagesUtil) {
+        super(textKey, id, buttonTextKey, messagesUtil);
+        this.layout = layout;
+        this.childMenuItems = childMenuItems;
+        this.backButtonId = backButtonId;
+        init();
+    }
+
+
     /**
      * here we represent child menu items to keyboard row using {@link #layout}
      */
-    @PostConstruct
     protected void init() {
         if (layout == null) { //if layout not init that mean we don't have any childItems
             return;
@@ -53,19 +63,11 @@ public abstract class KeyboardMenuItem implements MenuItem {
     }
 
     @Override
-    public SendMessage getSendMessage(Locale locale) { //we get SendMessage with already localized text field
+    public SendMessage getSendMessage(Locale locale) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(messagesUtil.getMessageByKey(getTextKey(), locale));
         sendMessage.setReplyMarkup(new ReplyKeyboardMarkup().setKeyboard(getLocalizedKeyboardButtons(locale)));
         return sendMessage;
-    }
-
-    @Override
-    public void addChildItem(MenuItem menuItem) {
-        if (childMenuItems == null) {
-            childMenuItems = new ArrayList<>();
-        }
-        childMenuItems.add(menuItem);
     }
 
     @Override
@@ -76,6 +78,10 @@ public abstract class KeyboardMenuItem implements MenuItem {
         return childMenuItems;
     }
 
+    @Override
+    public void setChildMenuItems(List<MenuItem> childMenuItems) {
+        this.childMenuItems = childMenuItems;
+    }
 
     @Override
     public List<KeyboardRow> getKeyboardRowList() {
@@ -86,14 +92,20 @@ public abstract class KeyboardMenuItem implements MenuItem {
     }
 
     @Override
-    public String getTextKey() { //default  message text same that button text
-        return getButtonTextKey();
+    public KeyboardButton getKeyboardButton() {
+        return new KeyboardButton(String.format(MENU_BUTTON_TEXT_FORMAT, getId(), getButtonTextKey()));
     }
 
     @Override
-    public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(String.format(FORMAT, getId(), getButtonTextKey()));
+    public String getBackButtonId() {
+        return backButtonId;
     }
+
+    @Override
+    public void setBackButtonId(String backButtonId) {
+        this.backButtonId = backButtonId;
+    }
+
 
     protected List<KeyboardRow> getLocalizedKeyboardButtons(Locale locale) {
         List<KeyboardRow> localizedKeyboardRowList = getKeyboardRowListCopy();

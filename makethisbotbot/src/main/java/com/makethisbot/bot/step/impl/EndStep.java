@@ -3,7 +3,6 @@ package com.makethisbot.bot.step.impl;
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.menu.MenuItem;
 import com.makethisbot.bot.step.TextStep;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
@@ -13,8 +12,11 @@ import java.util.Locale;
 @Component("endStep")
 public class EndStep extends TextStep {
 
-    @Autowired
-    MenuItem rootMenuItem;
+    private MenuItem rootMenuItem;
+
+    public void setRootMenuItem(MenuItem rootMenuItem) {
+        this.rootMenuItem = rootMenuItem;
+    }
 
     @Override
     public boolean isCurrentStepCompleted(User user) {
@@ -45,5 +47,4 @@ public class EndStep extends TextStep {
     public SendMessage getPromptSendMessage(Long chatId, Locale locale) {
         return rootMenuItem.getSendMessage(locale).setChatId(chatId); //link end step with menu whe all ste is completed instead prompt to next step we send root menu item
     }
-
 }
