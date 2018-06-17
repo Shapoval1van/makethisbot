@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class CommandResolver {
 
-    public final Map<String, Command> commands = new HashMap<>();
+    private final Map<String, Command> commands = new HashMap<>();
 
     @Autowired
     @Qualifier("helpOrderTypeCommand")
@@ -29,7 +29,7 @@ public class CommandResolver {
     }
 
     public boolean isCommandExist(Update update) {
-        if (update.hasMessage() && !CollectionUtils.isEmpty(update.getMessage().getEntities())) {
+        if (!CollectionUtils.isEmpty(update.getMessage().getEntities())) {
             return !CollectionUtils.isEmpty(getMessageEntities(update));
         }
         return false;
@@ -53,7 +53,7 @@ public class CommandResolver {
         return commands.get(command);
     }
 
-    private List<MessageEntity> getMessageEntities(Update update) {
+    protected List<MessageEntity> getMessageEntities(Update update) {
         return update.getMessage().getEntities()
                 .stream()
                 .filter(messageEntity -> messageEntity.getType().equals("bot_command"))

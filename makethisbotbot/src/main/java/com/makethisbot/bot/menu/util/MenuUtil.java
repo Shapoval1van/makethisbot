@@ -1,4 +1,4 @@
-package com.makethisbot.bot.util;
+package com.makethisbot.bot.menu.util;
 
 import com.makethisbot.bot.menu.ContainerMenuItem;
 import com.makethisbot.bot.menu.MenuItem;

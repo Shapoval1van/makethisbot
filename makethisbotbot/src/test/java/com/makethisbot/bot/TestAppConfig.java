@@ -11,7 +11,7 @@ import com.makethisbot.bot.menu.impl.MenuItemImpl;
 import com.makethisbot.bot.menu.layout.LayoutManager;
 import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.step.impl.EndStep;
-import com.makethisbot.bot.util.MenuUtil;
+import com.makethisbot.bot.menu.util.MenuUtil;
 import com.makethisbot.bot.util.MessagesUtil;
 import com.mongodb.Mongo;
 import org.springframework.beans.factory.annotation.Autowired;
