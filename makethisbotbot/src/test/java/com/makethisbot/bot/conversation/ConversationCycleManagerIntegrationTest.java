@@ -2,6 +2,7 @@ package com.makethisbot.bot.conversation;
 
 import com.makethisbot.bot.TestAppConfig;
 import com.makethisbot.bot.entity.Order;
+import com.makethisbot.bot.entity.OrderType;
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.menu.ContainerMenuItem;
 import com.makethisbot.bot.menu.MenuItem;
@@ -125,7 +126,7 @@ public class ConversationCycleManagerIntegrationTest {
     @Test
     public void processMessage_shouldSendRootMenu() {
         Order order = new Order();
-        order.setType("1");
+        order.setType(OrderType.BUSINESS);
         ConversationCycleManager conversationCycleManagerSpy = Mockito.spy(conversationCycleManager);
         user.setName(name);
         user.setPhoneNumber(phone);
@@ -142,7 +143,7 @@ public class ConversationCycleManagerIntegrationTest {
     public void processMessage_shouldSendFaqMenu() {
         String messageText = String.format(MENU_BUTTON_TEXT_FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), "text");
         Order order = new Order();
-        order.setType("1");
+        order.setType(OrderType.BUSINESS);
         order.setDescribe("dfgdsfgsd");
         ConversationCycleManager conversationCycleManagerSpy = Mockito.spy(conversationCycleManager);
         user.setName(name);
@@ -152,7 +153,7 @@ public class ConversationCycleManagerIntegrationTest {
         userRepository.save(user);
         message.setText(messageText);
         SendMessage sendMessage = conversationCycleManagerSpy.processMessage(message, user);
-        verify(conversationCycleManagerSpy, times(1)).processMenu(chatId, messageText, userUtil.getLocalFromUser(user));
+        verify(conversationCycleManagerSpy, times(1)).processMenu(chatId, messageText, userUtil.getLocalFromUser(user), user);
         ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) sendMessage.getReplyMarkup();
         assertEquals(((ContainerMenuItem) faqMenuItemContainer).getKeyboardRowList().size(), replyKeyboardMarkup.getKeyboard().size());
     }

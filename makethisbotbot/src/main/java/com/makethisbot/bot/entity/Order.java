@@ -16,11 +16,15 @@ public class Order {
 
     @Getter
     @Setter
-    private String type;
+    private OrderType type;
 
     @Getter
     @Setter
     private TimeStamp dueDate;
+
+    @Getter
+    @Setter
+    private OrderStatus orderStatus;
 
     private URL blobFileURL;
 

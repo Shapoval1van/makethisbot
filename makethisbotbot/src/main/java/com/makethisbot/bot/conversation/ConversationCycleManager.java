@@ -53,7 +53,7 @@ public class ConversationCycleManager {
             return processSteps(currentStep, user, message);
         }
         Locale locale = userUtil.getLocalFromUser(user);
-        return processMenu(message.getChatId(), message.getText(), locale);
+        return processMenu(message.getChatId(), message.getText(), locale, user);
     }
 
     protected SendMessage processSteps(Step currentStep, User user, Message message) {
@@ -66,14 +66,14 @@ public class ConversationCycleManager {
         return currentStep.getNextStep().getPromptSendMessage(message.getChatId(), locale);
     }
 
-    protected SendMessage processMenu(Long chatId, String messageText, Locale locale) {
+    protected SendMessage processMenu(Long chatId, String messageText, Locale locale, User user) {
         int index = messageText.indexOf(MENU_BUTTON_TEXT_SEPARATOR);
         if (index == -1) {
             return processWrongMessage(chatId, messageText, locale);
         }
         String id = messageText.subSequence(0, index).toString();
         MenuItem menuItem = findMenuItemById(id);
-        return menuItem == null ? processWrongMessage(chatId, messageText, locale) : menuItem.getSendMessage(locale).setChatId(chatId);
+        return menuItem == null ? processWrongMessage(chatId, messageText, locale) : menuItem.getSendMessage(user).setChatId(chatId);
     }
 
     /**

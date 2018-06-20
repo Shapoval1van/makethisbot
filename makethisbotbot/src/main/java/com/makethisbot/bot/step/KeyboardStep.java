@@ -30,7 +30,7 @@ public abstract class   KeyboardStep extends Step {
         } catch (NumberFormatException e) {
             return false;
         }
-        return buttonIndex <= getKeyboardTitleKey().size();
+        return buttonIndex <= getKeyboardTitleKey().size() && buttonIndex >= 0;
     }
 
     @Override

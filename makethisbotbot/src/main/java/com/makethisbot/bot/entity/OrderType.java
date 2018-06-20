@@ -1,4 +1,4 @@
-package com.makethisbot.bot.step;
+package com.makethisbot.bot.entity;
 
 public enum OrderType {
 

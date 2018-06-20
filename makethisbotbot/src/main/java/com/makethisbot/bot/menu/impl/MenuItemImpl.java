@@ -1,5 +1,6 @@
 package com.makethisbot.bot.menu.impl;
 
+import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.menu.MenuItem;
 import com.makethisbot.bot.util.MessagesUtil;
 import org.slf4j.Logger;
@@ -37,6 +38,11 @@ public class MenuItemImpl implements MenuItem {
         this.id = id;
         this.buttonTextKey = buttonTextKey;
         this.messagesUtil = messagesUtil;
+    }
+
+    @Override
+    public SendMessage getSendMessage(User user) {
+        return getSendMessage(new Locale(user.getLanguageCode()));
     }
 
     @Override

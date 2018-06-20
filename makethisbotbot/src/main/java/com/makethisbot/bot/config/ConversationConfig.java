@@ -1,6 +1,8 @@
 package com.makethisbot.bot.config;
 
 
+import com.makethisbot.bot.entity.OrderStatus;
+import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.menu.MenuItem;
 import com.makethisbot.bot.menu.impl.ContainerMenuItemImpl;
 import com.makethisbot.bot.menu.impl.MenuItemImpl;
@@ -16,10 +18,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.makethisbot.bot.menu.MenuItemsIds.CHANGE_DATA_MENU_ITEM_ID;
@@ -116,7 +120,19 @@ public class ConversationConfig {
     public MenuItem showOrderStatusMenuItem() {
         return new MenuItemImpl(SHOW_ORDER_STATUS_MENU_ITEM_ID.getId(),
                 "menu.show.order.status.button",
-                messagesUtil);
+                messagesUtil) {
+            @Override
+            public SendMessage getSendMessage(User user) {
+                Locale locale = new Locale(user.getLanguageCode());
+                SendMessage sendMessage = getSendMessage(locale);
+                OrderStatus orderStatus = user.getOrder().getOrderStatus();
+                StringBuffer stringBuffer = new StringBuffer()
+                        .append(messagesUtil.getMessageByKey("status.message", locale))
+                        .append(messagesUtil.getMessageByKey(orderStatus.getKey(), locale));
+                sendMessage.setText(stringBuffer.toString());
+                return sendMessage;
+            }
+        };
     }
 
     @Bean

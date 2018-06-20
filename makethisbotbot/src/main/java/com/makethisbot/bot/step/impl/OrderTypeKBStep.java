@@ -3,7 +3,7 @@ package com.makethisbot.bot.step.impl;
 import com.makethisbot.bot.entity.Order;
 import com.makethisbot.bot.entity.User;
 import com.makethisbot.bot.step.KeyboardStep;
-import com.makethisbot.bot.step.OrderType;
+import com.makethisbot.bot.entity.OrderType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.objects.Message;
@@ -16,11 +16,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import static com.makethisbot.bot.step.OrderType.BUSINESS;
-import static com.makethisbot.bot.step.OrderType.DEFAULT;
-import static com.makethisbot.bot.step.OrderType.FUN;
-import static com.makethisbot.bot.step.OrderType.GAME;
-import static com.makethisbot.bot.step.OrderType.ORGANIZER;
+import static com.makethisbot.bot.entity.OrderStatus.QUEUE;
+import static com.makethisbot.bot.entity.OrderType.BUSINESS;
+import static com.makethisbot.bot.entity.OrderType.DEFAULT;
+import static com.makethisbot.bot.entity.OrderType.FUN;
+import static com.makethisbot.bot.entity.OrderType.GAME;
+import static com.makethisbot.bot.entity.OrderType.ORGANIZER;
 
 @Component("orderTypeEnterKBStep")
 public class OrderTypeKBStep extends KeyboardStep {
@@ -36,15 +37,16 @@ public class OrderTypeKBStep extends KeyboardStep {
         String[] splittedMessageText = messageText.split(Pattern.quote("."));
         int buttonIndex = Integer.parseInt(splittedMessageText[0]);
         OrderType orderType = findOrderTypeById(buttonIndex);
-        String type = orderType.name();
 
         Order order = user.getOrder();
         if (order == null) {
             order = new Order();
-            order.setType(type);
+            order.setType(orderType);
+            order.setOrderStatus(QUEUE);
             user.setOrder(order);
         } else {
-            order.setType(type);
+            order.setType(orderType);
+            order.setOrderStatus(QUEUE);
         }
         return user;
     }
