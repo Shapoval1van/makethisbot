@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import static com.makethisbot.bot.menu.util.Constants.MENU_BUTTON_TEXT_SEPARATOR;
+import static com.makethisbot.bot.menu.util.Constants.BUTTON_TEXT_SEPARATOR;
 
 @Component
 public class MessagesUtil {
@@ -28,12 +28,12 @@ public class MessagesUtil {
         if (!isButtonMenuTextValid(buttonMenuText)) {
             return "Some error occurrence";
         }
-        String[] splittedButtonMenuText = buttonMenuText.split(Pattern.quote(MENU_BUTTON_TEXT_SEPARATOR));
-        return splittedButtonMenuText[0] + MENU_BUTTON_TEXT_SEPARATOR + getMessageByKey(splittedButtonMenuText[1], locale);
+        String[] splittedButtonMenuText = buttonMenuText.split(Pattern.quote(BUTTON_TEXT_SEPARATOR));
+        return splittedButtonMenuText[0] + BUTTON_TEXT_SEPARATOR + getMessageByKey(splittedButtonMenuText[1], locale);
     }
 
     protected boolean isButtonMenuTextValid(String buttonMenuText) {
-        String[] splittedButtonMenuText = buttonMenuText.split(Pattern.quote(MENU_BUTTON_TEXT_SEPARATOR));
+        String[] splittedButtonMenuText = buttonMenuText.split(Pattern.quote(BUTTON_TEXT_SEPARATOR));
         for (MenuItemsIds menuItemsIds : MenuItemsIds.values()) {
             if (menuItemsIds.getId().equals(splittedButtonMenuText[0])) {
                 return true;

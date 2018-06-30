@@ -5,7 +5,6 @@ import com.makethisbot.bot.menu.MenuItem;
 import com.makethisbot.bot.menu.layout.LayoutInitializationException;
 import com.makethisbot.bot.menu.layout.LayoutManager;
 import com.makethisbot.bot.menu.util.KeyboardRowCollector;
-import com.makethisbot.bot.util.MessagesUtil;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -17,7 +16,7 @@ import java.util.List;
 
 import java.util.Locale;
 
-import static com.makethisbot.bot.menu.util.Constants.MENU_BUTTON_TEXT_FORMAT;
+import static com.makethisbot.bot.menu.util.Constants.BUTTON_TEXT_FORMAT;
 import static java.util.stream.Collectors.toList;
 
 public class ContainerMenuItemImpl extends MenuItemImpl implements ContainerMenuItem {
@@ -35,9 +34,8 @@ public class ContainerMenuItemImpl extends MenuItemImpl implements ContainerMenu
                                  @NotNull String buttonTextKey,
                                  @NotNull String backButtonId,
                                  @NotNull List<MenuItem> childMenuItems,
-                                 @NotNull LayoutManager layout,
-                                 @NotNull MessagesUtil messagesUtil) {
-        super(textKey, id, buttonTextKey, messagesUtil);
+                                 @NotNull LayoutManager layout) {
+        super(textKey, id, buttonTextKey);
         this.layout = layout;
         this.childMenuItems = childMenuItems;
         this.backButtonId = backButtonId;
@@ -93,7 +91,7 @@ public class ContainerMenuItemImpl extends MenuItemImpl implements ContainerMenu
 
     @Override
     public KeyboardButton getKeyboardButton() {
-        return new KeyboardButton(String.format(MENU_BUTTON_TEXT_FORMAT, getId(), getButtonTextKey()));
+        return new KeyboardButton(String.format(BUTTON_TEXT_FORMAT, getId(), getButtonTextKey()));
     }
 
     @Override

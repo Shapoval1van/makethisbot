@@ -8,8 +8,7 @@ import com.makethisbot.bot.step.Step;
 import com.makethisbot.bot.step.impl.EndStep;
 import com.makethisbot.bot.util.MessagesUtil;
 import com.makethisbot.bot.util.UserUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -21,12 +20,11 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.makethisbot.bot.menu.util.Constants.MENU_BUTTON_TEXT_SEPARATOR;
+import static com.makethisbot.bot.menu.util.Constants.BUTTON_TEXT_SEPARATOR;
 
 @Component
+@Slf4j
 public class ConversationCycleManager {
-
-    private Logger logger = LoggerFactory.getLogger(ConversationCycleManager.class);
 
     @Autowired
     protected UserRepository userRepository;
@@ -63,17 +61,32 @@ public class ConversationCycleManager {
         }
         currentStep.updateUserData(user, message);
         userRepository.save(user);
+        if (isAllStepCompleted(currentStep, user)) {
+            return rootMenuItem.getSendMessage(locale)
+                    .setText(messagesUtil.getMessageByKey("menu.change.data.successful", new Locale(user.getLanguageCode())))
+                    .setChatId(message.getChatId());
+        }
         return currentStep.getNextStep().getPromptSendMessage(message.getChatId(), locale);
     }
 
     protected SendMessage processMenu(Long chatId, String messageText, Locale locale, User user) {
-        int index = messageText.indexOf(MENU_BUTTON_TEXT_SEPARATOR);
+        int index = messageText.indexOf(BUTTON_TEXT_SEPARATOR);
         if (index == -1) {
             return processWrongMessage(chatId, messageText, locale);
         }
         String id = messageText.subSequence(0, index).toString();
         MenuItem menuItem = findMenuItemById(id);
         return menuItem == null ? processWrongMessage(chatId, messageText, locale) : menuItem.getSendMessage(user).setChatId(chatId);
+    }
+
+    protected boolean isAllStepCompleted(Step currentStep, User user) {
+        while (!(currentStep instanceof EndStep)) {
+            if (!currentStep.isCurrentStepCompleted(user)) {
+                return false;
+            }
+            currentStep = currentStep.getNextStep();
+        }
+        return true;
     }
 
     /**
@@ -99,7 +112,7 @@ public class ConversationCycleManager {
     }
 
     protected SendMessage processWrongMessage(Long chatId, String messageText, Locale locale) {
-        logger.warn("wrong menu Id was sanded from chat - {}, message - {}", chatId, messageText); //TODO change it
+        log.warn("wrong menu Id was sanded from chat - {}, message - {}", chatId, messageText);
         return new SendMessage(chatId, messagesUtil.getMessageByKey("menu.error", locale));
     }
 }

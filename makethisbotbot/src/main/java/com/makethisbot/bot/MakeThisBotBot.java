@@ -1,7 +1,6 @@
 package com.makethisbot.bot;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,9 +14,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
+@Slf4j
 public class MakeThisBotBot extends TelegramLongPollingBot {
-
-    Logger logger = LoggerFactory.getLogger(MakeThisBotBot.class);
 
     @Value("${tread.count}")
     private int poolCount;
@@ -45,11 +43,11 @@ public class MakeThisBotBot extends TelegramLongPollingBot {
                 SendMessage sendMessage = updateHandler.processUpdate(update);
                 execute(sendMessage);
             } catch (TelegramApiException e) {
-                logger.error("Was occurred telegram telegram api exception. userId = {}", update.getMessage().getFrom().getId());
-                logger.error(e.getMessage(), e);
+                log.error("Was occurred telegram telegram api exception. userId = {}", update.getMessage().getFrom().getId());
+                log.error(e.getMessage(), e);
             } catch (Exception e) {
-                logger.error("UserId =  {}", update.getMessage().getFrom().getId());
-                logger.error(e.getMessage(), e);
+                log.error("UserId =  {}", update.getMessage().getFrom().getId());
+                log.error(e.getMessage(), e);
             }
         });
     }

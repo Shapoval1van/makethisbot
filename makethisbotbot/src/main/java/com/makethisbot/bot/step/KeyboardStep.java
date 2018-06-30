@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-public abstract class   KeyboardStep extends Step {
+public abstract class KeyboardStep extends Step {
 
     @Autowired
     protected MessagesUtil messagesUtil;

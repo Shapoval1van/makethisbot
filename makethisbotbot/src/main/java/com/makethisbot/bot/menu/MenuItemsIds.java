@@ -11,6 +11,13 @@ public enum MenuItemsIds {
     CHANGE_DATA_MENU_ITEM_ID("\u270F"),
     TO_ROOT_BACK_BUTTON_ID("\uD83D\uDD19"),
 
+    CHANGE_DATA_MENU_ITEM_ID_NAME("\uD83D\uDC66"),
+    CHANGE_DATA_MENU_ITEM_ID_PHONE("\uD83D\uDCF1"),
+    CHANGE_DATA_MENU_ITEM_ID_EMAIL("✉"),
+    CHANGE_DATA_MENU_ITEM_ID_DUE_DATE("\uD83D\uDDD3"),
+
+    SHOW_USER_DATA_MENU_ITEM("\uD83C\uDF93"),
+
     TO_FAQ_BACK_BUTTON_ID("\u2049");
     private String id;
 
@@ -22,6 +29,4 @@ public enum MenuItemsIds {
     public String getId() {
         return id;
     }
-
-    //  public static String TO_ROOT_BACK_BUTTON_ID = "\u2934";
 }

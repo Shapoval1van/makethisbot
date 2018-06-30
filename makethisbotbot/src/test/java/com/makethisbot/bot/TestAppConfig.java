@@ -113,9 +113,7 @@ public class TestAppConfig extends PersistenceConfig {
                 "menu.root.button",
                 "",
                 Arrays.asList(changeDataMenuItem(), showOrderStatusMenuItem(), faqMenuItemContainer()),
-                rootMenuItemLayout(),
-                messagesUtil);
-        ((EndStep) endStep).setRootMenuItem(rootMenuItem);
+                rootMenuItemLayout());
         new MenuUtil().addBackButtons(rootMenuItem, backButtonsMap);
         return rootMenuItem;
     }
@@ -124,15 +122,13 @@ public class TestAppConfig extends PersistenceConfig {
     public MenuItem changeDataMenuItem() {
         return new MenuItemImpl("menu.change.data",
                 CHANGE_DATA_MENU_ITEM_ID.getId(),
-                "menu.change.data.button",
-                messagesUtil);
+                "menu.change.data.button");
     }
 
     @Bean
     public MenuItem showOrderStatusMenuItem() {
         return new MenuItemImpl(SHOW_ORDER_STATUS_MENU_ITEM_ID.getId(),
-                "menu.show.order.status.button",
-                messagesUtil);
+                "menu.show.order.status.button");
     }
 
     @Bean
@@ -142,8 +138,7 @@ public class TestAppConfig extends PersistenceConfig {
                 "menu.faq.button",
                 TO_ROOT_BACK_BUTTON_ID.getId(),
                 Arrays.asList(faqMenuItem1(), faqMenuItem2()),
-                faqMenuItemLayout(),
-                messagesUtil);
+                faqMenuItemLayout());
         return rootMenuItem;
     }
 
@@ -151,16 +146,14 @@ public class TestAppConfig extends PersistenceConfig {
     public MenuItem faqMenuItem1() {
         return new MenuItemImpl("menu.faq.question1",
                 FAQ_MENU_QUESTION1_ITEM_ID.getId(),
-                "menu.faq.question1.button",
-                messagesUtil);
+                "menu.faq.question1.button");
     }
 
     @Bean
     public MenuItem faqMenuItem2() {
         return new MenuItemImpl("menu.faq.question2",
                 FAQ_MENU_QUESTION2_ITEM_ID.getId(),
-                "menu.faq.question2.button",
-                messagesUtil);
+                "menu.faq.question2.button");
     }
 
     @Bean

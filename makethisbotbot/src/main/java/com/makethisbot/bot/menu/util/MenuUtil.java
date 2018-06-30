@@ -9,7 +9,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import java.util.LinkedList;
 import java.util.Map;
 
-import static com.makethisbot.bot.menu.util.Constants.MENU_BUTTON_TEXT_FORMAT;
+import static com.makethisbot.bot.menu.util.Constants.BUTTON_TEXT_FORMAT;
 import static java.lang.String.format;
 
 public class MenuUtil {
@@ -27,7 +27,7 @@ public class MenuUtil {
                         ContainerMenuItem containerChildItem = (ContainerMenuItem) childItem;
                         backButtonsMap.put(containerChildItem.getBackButtonId(), containerMenuItem);
                         KeyboardRow keyboardRow = new KeyboardRow();
-                        keyboardRow.add(new KeyboardButton(format(MENU_BUTTON_TEXT_FORMAT, containerChildItem.getBackButtonId(), "menu.back.button")));
+                        keyboardRow.add(new KeyboardButton(format(BUTTON_TEXT_FORMAT, containerChildItem.getBackButtonId(), "menu.back.button")));
                         containerChildItem.getKeyboardRowList().add(keyboardRow);
                     }
                 });

@@ -1,6 +1,7 @@
 package com.makethisbot.bot.menu;
 
 import com.makethisbot.bot.entity.User;
+import com.makethisbot.bot.repository.UserRepository;
 
 public interface ActionMenuItem extends MenuItem {
 
@@ -10,4 +11,5 @@ public interface ActionMenuItem extends MenuItem {
      */
     void doAction(User user);
 
+    UserRepository getUserRepository();
 }

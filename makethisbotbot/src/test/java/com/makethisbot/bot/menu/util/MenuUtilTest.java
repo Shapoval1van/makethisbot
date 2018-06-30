@@ -41,8 +41,7 @@ public class MenuUtilTest {
     @InjectMocks
     MenuItem faqMenuItem1 = new MenuItemImpl("menu.faq.question1",
             FAQ_MENU_QUESTION1_ITEM_ID.getId(),
-            "menu.faq.question1.button",
-            messagesUtil);
+            "menu.faq.question1.button");
 
     @InjectMocks
     MenuItem faqMenuItemContainer = new ContainerMenuItemImpl("menu.faq",
@@ -50,8 +49,7 @@ public class MenuUtilTest {
             "menu.faq.button",
             TO_ROOT_BACK_BUTTON_ID.getId(),
             Arrays.asList(faqMenuItem1),
-            faqMenuItemLayout(),
-            messagesUtil);
+            faqMenuItemLayout());
 
     @InjectMocks
     MenuItem rootMenuItem = new ContainerMenuItemImpl("menu.root",
@@ -59,8 +57,7 @@ public class MenuUtilTest {
             "menu.root.button",
             "",
             Arrays.asList(faqMenuItemContainer),
-            rootMenuItemLayout(),
-            messagesUtil);
+            rootMenuItemLayout());
 
     @Test
     public void addBackButtons() throws Exception {

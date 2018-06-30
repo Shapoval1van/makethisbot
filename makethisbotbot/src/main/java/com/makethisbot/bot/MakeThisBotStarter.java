@@ -1,15 +1,13 @@
 package com.makethisbot.bot;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.TelegramBotsApi;
 
 @Component
+@Slf4j
 public class MakeThisBotStarter {
-
-    Logger logger = LoggerFactory.getLogger(MakeThisBotStarter.class);
 
     @Autowired
     private MakeThisBotBot makeThisBotBot;
@@ -19,7 +17,7 @@ public class MakeThisBotStarter {
         try {
             botsApi.registerBot(makeThisBotBot);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 }

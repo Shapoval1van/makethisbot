@@ -26,7 +26,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 import java.util.Locale;
 
-import static com.makethisbot.bot.menu.util.Constants.MENU_BUTTON_TEXT_FORMAT;
+import static com.makethisbot.bot.menu.util.Constants.BUTTON_TEXT_FORMAT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.times;
@@ -141,7 +141,7 @@ public class ConversationCycleManagerIntegrationTest {
 
     @Test
     public void processMessage_shouldSendFaqMenu() {
-        String messageText = String.format(MENU_BUTTON_TEXT_FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), "text");
+        String messageText = String.format(BUTTON_TEXT_FORMAT, MenuItemsIds.FAQ_MENU_ITEM_ID.getId(), "text");
         Order order = new Order();
         order.setType(OrderType.BUSINESS);
         order.setDescribe("dfgdsfgsd");

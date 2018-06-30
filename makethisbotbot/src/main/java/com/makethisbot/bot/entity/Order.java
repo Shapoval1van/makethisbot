@@ -3,10 +3,10 @@ package com.makethisbot.bot.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.glassfish.grizzly.http.util.TimeStamp;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 public class Order {
 
@@ -20,7 +20,7 @@ public class Order {
 
     @Getter
     @Setter
-    private TimeStamp dueDate;
+    private Date dueDate;
 
     @Getter
     @Setter
@@ -28,6 +28,7 @@ public class Order {
 
     private URL blobFileURL;
 
+    //TODO add link to specification
     public void setBlobFileURL(String url) {
         try {
             blobFileURL = new URL(url);
